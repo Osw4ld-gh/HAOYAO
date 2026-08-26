@@ -1,0 +1,63 @@
+# ============================================================================
+# HAOYAO 官网 pre-commit 钩子配置
+# 依据：方案 §3 工程基线 / §7 测试与质量门禁总纲。
+# 用法：
+#   1) 安装 pre-commit：pip install pre-commit
+#   2) 启用钩子：pre-commit install
+#   3) 手动全量检查：pre-commit run --all-files
+# 说明：钩子仅做轻量检查（lint/format/类型），CI 负责完整验证（lint + test + build）。
+# ============================================================================
+
+repos:
+  # ---------- 后端：ruff（lint + format）与 mypy（类型） ----------
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+        files: ^apps/api/(app|tests)/.*\.py$
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        files: ^apps/api/app/.*\.py$
+        additional_dependencies:
+          - sqlalchemy
+          - pydantic
+          - pydantic-settings
+          - pyjwt
+          - bcrypt
+          - fastapi
+        args: ["--config-file=apps/api/pyproject.toml"]
+
+  # ---------- 前端：ESLint（lint）+ Prettier（format） ----------
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.13.0
+    hooks:
+      - id: eslint
+        files: ^apps/web/.*\.(ts|tsx|js|jsx)$
+        additional_dependencies:
+          - eslint@^9
+          - eslint-config-next@15.5.24
+        args: ["--config=apps/web/eslint.config.mjs"]
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: 3.3.3
+    hooks:
+      - id: prettier
+        files: ^apps/web/.*\.(ts|tsx|js|jsx|css|json|md)$
+        # 前端项目根（含 ESLint/TS 配置文件）
+        args: ["--config", "apps/web/.prettierrc.json"]
+
+  # ---------- 通用：行尾/尾空格/YAML/TOML 基础规范 ----------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=500"]

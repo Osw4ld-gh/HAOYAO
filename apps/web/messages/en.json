@@ -1,0 +1,117 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong, please try again",
+    "new": "New",
+    "all": "All",
+    "prev": "Previous",
+    "next": "Next",
+    "noData": "No content yet",
+    "home": "Home",
+    "readMore": "Learn More"
+  },
+  "nav": {
+    "home": "Home",
+    "fragrance": "Fragrance",
+    "makeup": "Makeup",
+    "skincare": "Skincare",
+    "news": "News",
+    "about": "About",
+    "switchTo": "EN",
+    "closeMenu": "Close menu",
+    "openMenu": "Open menu"
+  },
+  "home": {
+    "slogan": "皓启纯净，遥见本真",
+    "sloganEn": "Pure Beginnings, True Vision",
+    "newProducts": "New Arrivals",
+    "newEyebrow": "NEW ARRIVALS",
+    "featured": "Featured Collection",
+    "featuredEyebrow": "FEATURED",
+    "discover": "Discover HAOYAO",
+    "discoverEyebrow": "THE HOUSE",
+    "ourStory": "Our Story",
+    "explore": "EXPLORE →",
+    "latestNews": "News & Insights",
+    "newsEyebrow": "LATEST NEWS",
+    "companyNews": "COMPANY",
+    "industryNews": "INDUSTRY"
+  },
+  "footer": {
+    "brand": "Brand",
+    "join": "Join Us",
+    "about": "About HAOYAO",
+    "service": "Customer Service",
+    "privacy": "Privacy Policy",
+    "icp": "ICP license placeholder",
+    "copyright": "© 2026 HAOYAO",
+    "socialRecruit": "Social Recruitment",
+    "campusRecruit": "Campus Recruitment",
+    "brandStory": "Brand Story",
+    "history": "History",
+    "contactUs": "Contact Us",
+    "brandDesc": "High-end skincare & fragrance brand. Pure beginnings, true vision.",
+    "serviceHours": "Mon–Fri 9:00–18:00"
+  },
+  "list": {
+    "noProducts": "No products yet",
+    "noProductsEn": "No products yet"
+  },
+  "detail": {
+    "description": "Description",
+    "ingredients": "Ingredients",
+    "usage": "How to Use",
+    "shades": "Shades",
+    "whereToBuy": "Where to Buy",
+    "related": "You May Also Like",
+    "purchaseAlert": "Please contact us for purchase channels."
+  },
+  "about": {
+    "story": "Brand Story",
+    "history": "History",
+    "contact": "Contact Us",
+    "storyHero": "THE HOUSE OF HAOYAO",
+    "ourStory": "Our Story",
+    "ourHistory": "Our History",
+    "contactUs": "Contact Us",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "placeholder": "More contact channels coming soon",
+    "storyPreparing": "Story content is being prepared.",
+    "timelinePreparing": "Timeline is being prepared.",
+    "slogan": "PURE BEGINNINGS, TRUE VISION"
+  },
+  "news": {
+    "title": "News",
+    "all": "All",
+    "company": "Company",
+    "industry": "Industry",
+    "noNews": "No news yet",
+    "contentComing": "Content coming soon.",
+    "companyTag": "COMPANY",
+    "industryTag": "INDUSTRY"
+  },
+  "join": {
+    "social": "Social Recruitment",
+    "campus": "Campus Recruitment",
+    "title": "Join Us",
+    "socialPlaceholder": "Recruitment channels are being prepared. Please contact HR for opportunities.",
+    "campusPlaceholder": "Campus recruitment is being prepared. Please contact HR for details."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "s1Title": "1. Information We Collect",
+    "s1Body": "This website does not require account registration. We do not collect personal information unless you voluntarily contact us.",
+    "s2Title": "2. Use of Information",
+    "s2Body": "Information you provide is used solely to respond to your inquiries.",
+    "s3Title": "3. Contact",
+    "s3Body": "For privacy inquiries, contact us via the Contact page.",
+    "note": "This is a placeholder policy. Final text will be confirmed before launch."
+  },
+  "seo": {
+    "homeTitle": "HAOYAO | Pure Beginnings, True Vision",
+    "homeDesc": "High-end beauty and skincare brand — pure beginnings, true vision.",
+    "brand": "HAOYAO"
+  }
+}

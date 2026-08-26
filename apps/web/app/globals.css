@@ -1,0 +1,73 @@
+/* ============================================================================
+ * HAOYAO（皓遥）全局样式
+ * 功能：基础 reset + 品牌基础样式（导入设计 Token）。
+ * 依据：《HAOYAO_官网_UI_UX_设计规范.md》§2 —— 全局底色/文字/字体由 Token 驱动。
+ * 说明：组件样式一律使用 CSS Modules（技术文档 §3.4），本文件仅承载全局基础。
+ * ========================================================================== */
+
+/* 设计 Token 全量引入（前后台共享） */
+@import "../styles/tokens.css";
+
+/* ---------- 基础 Reset ---------- */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden; /* 横向溢出防线（M7 兼容性验收四档断点无横向滚动） */
+}
+
+body {
+  min-height: 100%;
+  /* 品牌基础色：暖米白底 + 墨黑文字 */
+  color: var(--ink);
+  background: var(--bg);
+  /* 品牌字体栈：Inter/Noto Sans SC + 中文回退 */
+  font-family: var(--font-sans);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none; /* 链接样式由组件级控制（UI 规范 §3.3 按钮体系） */
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ---------- 后台基础 ---------- */
+/* 后台整体 14px 字号（UI 规范 §2.2 后台字号阶梯） */
+.admin-root {
+  font-size: var(--fs-admin-body);
+  background: var(--bg-admin);
+}
+
+/* ---------- 前台产品卡 hover（UI 规范 §3.5） ---------- */
+/* 卡片悬停位移 350ms + 图片放大 600ms（transition 在组件内联样式声明） */
+.product-card:hover {
+  transform: translateY(-6px);
+}
+.product-card:hover img {
+  transform: scale(1.05);
+}

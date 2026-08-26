@@ -1,0 +1,112 @@
+/* ============================================================================
+ * HAOYAO（皓遥）设计 Token（Design Tokens）
+ * 依据：《HAOYAO_官网_UI_UX_设计规范.md》§2（2.1 色彩 / 2.2 字体 / 2.3 间距栅格
+ *       / 2.4 阴影层级 / 2.5 动效）与《开发技术文档》§7.2 —— 全量落地，前后台共享。
+ * 说明：视觉 Token 与原型一致，禁止在此处自行发挥颜色/字号（P5 视觉照搬原则）。
+ * ========================================================================== */
+
+:root {
+  /* ---------- 2.1 色彩体系（前台） ---------- */
+  --bg: #F7F4EF;          /* 页面底色 · 暖米白 */
+  --surface: #FFFFFF;     /* 卡片/面板表面 */
+  --bg-soft: #EFEAE1;     /* 次级米色底（明星产品区、缩略图底） */
+  --ink: #191918;         /* 主文字 · 墨黑 */
+  --ink-2: #6B6559;       /* 次级文字 */
+  --ink-3: #9C968A;       /* 弱化文字（编号/时间/提示，仅 ≥11px 非关键信息） */
+  --gold: #A98E5F;        /* 品牌金 · 强调色 */
+  --gold-deep: #8C7344;   /* 深金 · 可读性更强的品牌强调 */
+  --gold-soft: #C8B48C;   /* 浅金 · 装饰/氛围（不承载文字） */
+  --line: #E6DFD3;        /* 分隔线/边框 */
+  --red: #A63D3D;         /* 新品标签（深红点缀） */
+  --hero-1: #211F1B;      /* Hero/页脚深墨底 */
+  --hero-2: #34302A;      /* Hero 渐变次深 */
+
+  /* ---------- 2.1 色彩体系（后台扩展，继承品牌 VI） ---------- */
+  --bg-admin: #F5F1EA;    /* 后台页面底色（略深，区分工作环境） */
+  --ink-2-admin: #5C574E; /* 后台次级文字（比前台略深，表格可读性） */
+  --green: #5F7A5B;       /* 状态绿（启用/已发布/完整） */
+  --side-bg: #1D1C19;     /* 后台左侧导航深色底 */
+  --side-ink: #C9C2B6;    /* 侧栏默认文字 */
+  --side-active: #F5F1EA; /* 侧栏激活项文字 */
+
+  /* ---------- 2.2 字体系统 ---------- */
+  /* 标题/品牌：英文衬线 + 中文衬线；正文：无衬线（回退链含本机字体） */
+  --font-serif: "Cormorant Garamond", "Noto Serif SC", "Songti SC", serif;
+  --font-sans: "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+
+  /* 前台字号阶梯（clamp 响应式） */
+  --fs-hero: clamp(56px, 11vw, 132px);   /* Hero 品牌名 */
+  --fs-h1: clamp(34px, 5vw, 58px);       /* 页面大标题 */
+  --fs-h2: clamp(26px, 3.2vw, 38px);     /* 区块标题 */
+  --fs-h3: clamp(19px, 2vw, 24px);       /* 卡片标题 */
+  --fs-body: 15px;                        /* 正文 */
+  --fs-eyebrow: 12px;                     /* 区块英文小标（大写+宽字距） */
+  --fs-meta: 12px;                        /* 辅助信息（编号/时间/提示） */
+
+  /* 后台字号阶梯 */
+  --fs-admin-h1: 26px;
+  --fs-admin-h3: 19px;
+  --fs-admin-modal: 20px;
+  --fs-admin-body: 14px;
+  --fs-admin-table: 13px;
+  --fs-admin-th: 11px;
+  --fs-admin-tag: 10px;
+
+  /* 字重 */
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* 行高 */
+  --lh-body: 1.7;
+  --lh-heading: 1.3;
+
+  /* ---------- 2.3 间距与栅格 ---------- */
+  --container-max: 1320px;    /* 内容容器最大宽度 */
+  --container-pad: 40px;      /* 容器水平 padding（≤768px 时 20px） */
+  --section-gap: 88px;        /* 区块纵向间距（≤768px 时 56px） */
+  --section-head-gap: 44px;   /* 区块头与内容间距 */
+  --grid-gap: 36px 28px;      /* 产品网格 gap（移动 24px 16px） */
+  --radius: 0;                /* 直角为主（高级感）；后台 2px */
+  --radius-admin: 2px;
+  --border: 1px solid var(--line);
+
+  /* 后台布局 */
+  --admin-pad: 28px 32px 60px; /* 后台内容区 padding */
+
+  /* ---------- 2.4 阴影与层级 ---------- */
+  --shadow: 0 18px 40px -18px rgba(25, 25, 24, 0.18);      /* 卡片/弹层 */
+  --shadow-dropdown: 0 30px 50px -30px rgba(25, 25, 24, 0.25); /* 下拉面板 */
+  --shadow-drawer: -30px 0 60px -30px rgba(0, 0, 0, 0.3);  /* 移动端抽屉 */
+  --shadow-login: 0 40px 80px -30px rgba(0, 0, 0, 0.6);    /* 登录卡片 */
+
+  /* z-index 尺度 */
+  --z-nav: 100;
+  --z-dropdown: 90;
+  --z-drawer: 150;
+  --z-mask: 140;
+  --z-modal: 200;
+  --z-toast: 300;
+
+  /* ---------- 2.5 动效规范（统一缓动曲线） ---------- */
+  --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-hover: 250ms;        /* hover 200–350ms */
+  --dur-card: 350ms;         /* 卡片悬停位移 */
+  --dur-zoom: 600ms;         /* 卡片图片放大 */
+  --dur-nav: 180ms;          /* 导航滚动收起 */
+  --dur-carousel: 700ms;     /* 轮播切换 */
+  --dur-page: 550ms;         /* 页面切换 fadeUp */
+  --dur-modal: 350ms;        /* 弹层开关 */
+  --dur-toast-in: 400ms;     /* Toast 显 */
+  --dur-toast-hold: 2.5s;    /* Toast 停留 */
+  --dur-drawer: 450ms;       /* 移动端抽屉 */
+}
+
+/* 尊重系统减弱动效偏好：动效降级为即时切换（UI 规范 §2.5 硬性要求） */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

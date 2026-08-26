@@ -1,0 +1,117 @@
+{
+  "common": {
+    "loading": "加载中…",
+    "error": "出错了，请稍后重试",
+    "new": "新品",
+    "all": "全部",
+    "prev": "上一页",
+    "next": "下一页",
+    "noData": "暂无内容",
+    "home": "首页",
+    "readMore": "了解更多"
+  },
+  "nav": {
+    "home": "首页",
+    "fragrance": "香水",
+    "makeup": "彩妆",
+    "skincare": "护肤品",
+    "news": "新闻资讯",
+    "about": "关于HAOYAO",
+    "switchTo": "中文",
+    "closeMenu": "关闭菜单",
+    "openMenu": "打开菜单"
+  },
+  "home": {
+    "slogan": "皓启纯净，遥见本真",
+    "sloganEn": "Pure Beginnings, True Vision",
+    "newProducts": "新品上市",
+    "newEyebrow": "NEW ARRIVALS",
+    "featured": "明星臻选",
+    "featuredEyebrow": "FEATURED",
+    "discover": "走进 HAOYAO",
+    "discoverEyebrow": "THE HOUSE",
+    "ourStory": "品牌故事",
+    "explore": "了解更多 →",
+    "latestNews": "新闻资讯",
+    "newsEyebrow": "LATEST NEWS",
+    "companyNews": "企业新闻",
+    "industryNews": "行业资讯"
+  },
+  "footer": {
+    "brand": "品牌",
+    "join": "加入我们",
+    "about": "关于 HAOYAO",
+    "service": "客户服务",
+    "privacy": "隐私声明",
+    "icp": "沪ICP备XXXXXXXX号（占位）",
+    "copyright": "© 2026 HAOYAO（皓遥）",
+    "socialRecruit": "社会招聘",
+    "campusRecruit": "校园招聘",
+    "brandStory": "品牌故事",
+    "history": "发展历程",
+    "contactUs": "联系我们",
+    "brandDesc": "高端美妆护肤品牌，探索纯净与真实的肌肤之美。",
+    "serviceHours": "周一至周五 9:00–18:00"
+  },
+  "list": {
+    "noProducts": "该分类暂无产品",
+    "noProductsEn": "No products yet"
+  },
+  "detail": {
+    "description": "功效描述",
+    "ingredients": "主要成分",
+    "usage": "使用方式",
+    "shades": "色号",
+    "whereToBuy": "了解购买渠道",
+    "related": "相关推荐",
+    "purchaseAlert": "欢迎通过「联系我们」了解购买渠道。"
+  },
+  "about": {
+    "story": "品牌故事",
+    "history": "发展历程",
+    "contact": "联系我们",
+    "storyHero": "THE HOUSE OF HAOYAO",
+    "ourStory": "品牌故事",
+    "ourHistory": "发展历程",
+    "contactUs": "联系我们",
+    "phone": "电话",
+    "email": "邮箱",
+    "address": "地址",
+    "placeholder": "更多联系渠道筹备中",
+    "storyPreparing": "品牌故事内容筹备中。",
+    "timelinePreparing": "发展历程筹备中。",
+    "slogan": "皓启纯净 · 遥见本真"
+  },
+  "news": {
+    "title": "新闻资讯",
+    "all": "全部",
+    "company": "企业新闻",
+    "industry": "行业资讯",
+    "noNews": "暂无资讯",
+    "contentComing": "正文筹备中。",
+    "companyTag": "企业新闻",
+    "industryTag": "行业资讯"
+  },
+  "join": {
+    "social": "社会招聘",
+    "campus": "校园招聘",
+    "title": "加入我们",
+    "socialPlaceholder": "招聘岗位与投递渠道筹备中，欢迎通过「联系我们」咨询。",
+    "campusPlaceholder": "校园招聘信息筹备中，欢迎通过「联系我们」咨询。"
+  },
+  "privacy": {
+    "title": "隐私声明",
+    "s1Title": "一、我们收集的信息",
+    "s1Body": "本网站无需注册账号。除您主动联系我们外，我们不收集个人信息。",
+    "s2Title": "二、信息的使用",
+    "s2Body": "您提供的信息仅用于回应您的咨询。",
+    "s3Title": "三、联系方式",
+    "s3Body": "如有隐私相关疑问，请通过「联系我们」页面与我们联系。",
+    "note": "本声明为占位文案，最终文本将于上线前确认。"
+  },
+  "seo": {
+    "homeTitle": "HAOYAO 皓遥 | 皓启纯净，遥见本真",
+    "homeDesc": "高端美妆护肤品牌——皓启纯净，遥见本真。",
+    "brand": "HAOYAO 皓遥"
+  }
+}

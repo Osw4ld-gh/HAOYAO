@@ -1,0 +1,47 @@
+# ─── Python (apps/api) ───
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ─── Node (apps/web) ───
+node_modules/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# ─── 环境变量与密钥 ───
+.env
+.env.local
+.env.*.local
+.env.production
+
+# ─── 依赖锁定（pnpm 遗留缓存，本地历史遗留，勿入库） ───
+.pnpm-store/
+
+# ─── 数据 / 媒体（本地模拟存储） ───
+*.db
+*.db-wal
+*.db-shm
+uploads/
+
+# ─── 编辑器 / 系统 ───
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ─── 日志 / 临时 ───
+*.log
+logs/
+tmp/

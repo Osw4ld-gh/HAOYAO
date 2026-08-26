@@ -1,0 +1,57 @@
+# ============================================================================
+# HAOYAO 后端（apps/api）工程配置
+# 依据：《HAOYAO_官网_开发技术文档.md》§3.4 代码规范 / §5.1 工程结构
+# 功能：统一 pytest / ruff / mypy 的配置，作为 CI 与本地质量门禁的依据
+# ============================================================================
+
+[project]
+name = "haoyao-api"
+version = "0.1.0"
+description = "HAOYAO（皓遥）官网后端 API 服务"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]",
+    "sqlalchemy>=2.0",
+    "pydantic>=2.5",
+    "pydantic-settings",
+    "pyjwt",
+    # 直接使用 bcrypt 官方库（passlib 已停止维护，与 bcrypt>=4.1 不兼容）
+    "bcrypt",
+    "python-multipart",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "httpx",
+    "ruff",
+    "mypy",
+]
+
+# ---------- pytest：测试发现路径 ----------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+# ---------- ruff：行宽 100，常用规则集 ----------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+# E=pycodestyle 错误, F=pyflakes, I=isort 导入排序, W=pycodestyle 警告, UP=pyupgrade, B=bugbear
+select = ["E", "F", "I", "W", "UP", "B"]
+# B008：允许函数调用作为参数默认值（FastAPI Depends 的惯用写法）
+ignore = ["B008"]
+
+# ---------- mypy：类型标注完整（后端硬性要求） ----------
+[tool.mypy]
+python_version = "3.12"
+# 要求所有函数具备类型标注（与方案"类型标注完整"对齐）
+disallow_untyped_defs = true
+check_untyped_defs = true
+ignore_missing_imports = true
+# pydantic v2 官方插件：正确推断 BaseModel 字段类型
+plugins = ["pydantic.mypy"]

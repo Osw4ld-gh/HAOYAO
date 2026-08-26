@@ -1,0 +1,12 @@
+{
+  "name": "haoyao",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HAOYAO（皓遥）美妆护肤品牌官网 monorepo（前台 + 后台管理系统）",
+  "scripts": {
+    "dev:web": "npm --prefix apps/web run dev",
+    "build:web": "npm --prefix apps/web run build",
+    "lint": "npm --prefix apps/web run lint",
+    "typecheck": "npm --prefix apps/web run typecheck"
+  }
+}
