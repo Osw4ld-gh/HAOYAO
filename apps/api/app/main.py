@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from contextlib import asynccontextmanager
@@ -21,6 +22,7 @@ from typing import Any
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .core.config import settings
 from .core.errors import BizError
@@ -161,6 +163,11 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> Respo
     logger.exception(json.dumps({"event": "unhandled_error", "path": request.url.path}))
     return fail(50000, "服务器内部错误", status_code=500)
 
+
+# ---------- 媒体静态目录（M6 本地模拟存储） ----------
+# UPLOAD_DIR 不存在则创建；/uploads 静态访问由 FastAPI 挂载提供
+os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
 # ---------- 路由注册 ----------
 # 健康检查：注册在根路径（无 /api/v1 前缀，供探针直接访问）

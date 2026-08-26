@@ -23,13 +23,15 @@ from sqlalchemy.orm import Session
 from ...core.config import settings
 from ...core.db import get_db
 from ...core.deps import require_admin, require_refresh_token
+from ...core.errors import validation
 from ...core.security import (
     create_access_token,
     create_refresh_token,
+    hash_password,
     verify_password,
 )
 from ...models import AdminUser
-from ...schemas.auth import LoginRequest, TokenResponse
+from ...schemas.auth import ChangePasswordBody, LoginRequest, TokenResponse
 from ...services.rate_limit import rate_limiter
 from ...utils.audit import write_audit
 from ...utils.response import fail, ok
@@ -156,3 +158,46 @@ def logout(
     write_audit(db, operator=operator, action="logout", target_type="admin_user")
 
     return ok(None, message="已登出")
+
+
+# ============================================================================
+# 修改密码（M6）：旧密码校验 + 新密码强度 + 审计 + 强制重新登录
+# ============================================================================
+
+@router.post("/change-password")
+def change_password(
+    body: ChangePasswordBody,
+    operator: str = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """修改管理员密码。
+
+    规则（技术文档 §6.3 M6 账号安全）：
+      - 旧密码必须正确（bcrypt 校验，错误返回 42200）
+      - 新密码 ≥8 位且同时含字母与数字
+      - 更新成功后客户端需重新登录（access/refresh 均失效，由前端清 token 处理）
+      - 审计：action=update / target_type=admin_password
+    """
+    from ...models import AdminUser
+
+    admin = db.query(AdminUser).filter(AdminUser.username == operator).first()
+    if admin is None or not verify_password(body.old_password, admin.password_hash):
+        raise validation("旧密码不正确")
+
+    new_pwd = body.new_password
+    has_alpha = any(c.isalpha() for c in new_pwd)
+    has_digit = any(c.isdigit() for c in new_pwd)
+    if not (has_alpha and has_digit):
+        raise validation("新密码须同时包含字母与数字")
+
+    # 新旧一致拒绝（弱变更）
+    if verify_password(new_pwd, admin.password_hash):
+        raise validation("新密码不能与旧密码相同")
+
+    admin.password_hash = hash_password(new_pwd)
+    db.commit()
+
+    from ...utils.audit import write_audit
+
+    write_audit(db, operator, "update", "admin_password", None, {})
+    return ok(None, message="密码修改成功，请重新登录")

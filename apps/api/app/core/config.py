@@ -64,6 +64,15 @@ class Settings(BaseSettings):
     # 内部接口调用密钥（与 Next.js 侧 ADMIN_API_KEY 一致）
     ADMIN_API_KEY: str = "revalidate-secret"
 
+    # ---------- 媒体库（M6，本地模拟存储） ----------
+    # 上传文件保存目录（相对运行目录 apps/api；Docker 挂载卷覆盖）
+    UPLOAD_DIR: str = "uploads"
+    # 媒体访问基础 URL（本地开发直连后端；生产替换为 CDN 域名）
+    MEDIA_BASE_URL: str = "http://localhost:8000/uploads"
+    # 上传大小限制（字节）：图片 10MB / 视频 200MB（PRD §5.6 / 技术文档 §5.7）
+    MAX_IMAGE_SIZE: int = 10 * 1024 * 1024
+    MAX_VIDEO_SIZE: int = 200 * 1024 * 1024
+
     @property
     def cors_origins_list(self) -> list[str]:
         """将逗号分隔的 CORS 白名单解析为列表（供 CORSMiddleware 使用）。"""

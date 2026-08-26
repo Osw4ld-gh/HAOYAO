@@ -11,8 +11,11 @@ from fastapi import APIRouter
 from .auth import router as auth_router
 from .categories import router as categories_router
 from .content import router as content_router
+from .media import router as media_router
 from .navigation import router as navigation_router
 from .products import router as products_router
+from .site_config import router as site_config_router
+from .stats import dashboard_router
 from .stats import router as stats_router
 
 # 后台统一路由：挂载到 /api/v1/admin（main.py 中 include）
@@ -23,3 +26,6 @@ admin_router.include_router(categories_router)   # /admin/top-categories* /admin
 admin_router.include_router(products_router)      # /admin/products*
 admin_router.include_router(content_router)       # /admin/story /admin/timeline* /admin/articles*
 admin_router.include_router(stats_router)         # /admin/translation-stats
+admin_router.include_router(dashboard_router)   # /admin/dashboard/stats
+admin_router.include_router(media_router)          # /admin/media*
+admin_router.include_router(site_config_router)  # /admin/banners* /admin/site-config

@@ -27,3 +27,15 @@ class LockedResponse(BaseModel):
     """账号锁定响应数据：解锁时间（UTC ISO8601）。"""
 
     locked_until: str
+
+
+class ChangePasswordBody(BaseModel):
+    """修改密码请求体：旧密码校验 + 新密码强度约束。"""
+
+    old_password: str = Field(..., min_length=1, max_length=72)
+    new_password: str = Field(
+        ...,
+        min_length=8,
+        max_length=72,
+        description="新密码：至少 8 位且含字母与数字",
+    )

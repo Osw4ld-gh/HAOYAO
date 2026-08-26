@@ -18,12 +18,12 @@ interface MenuItem {
 }
 
 const MENU: MenuItem[] = [
-  { key: "dashboard", label: "仪表盘", href: "/admin/dashboard", enabled: false },
+  { key: "dashboard", label: "仪表盘", href: "/admin/dashboard", enabled: true },
   { key: "navigation", label: "导航配置", href: "/admin/navigation", enabled: true },
   { key: "products", label: "产品管理", href: "/admin/products", enabled: true },
   { key: "content", label: "内容管理", href: "/admin/content", enabled: true },
-  { key: "media", label: "媒体库", href: "/admin/media", enabled: false },
-  { key: "config", label: "网站配置", href: "/admin/config", enabled: false },
+  { key: "media", label: "媒体库", href: "/admin/media", enabled: true },
+  { key: "config", label: "网站配置", href: "/admin/config", enabled: true },
 ];
 
 export default function Sidebar() {

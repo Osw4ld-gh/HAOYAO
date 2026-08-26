@@ -90,15 +90,19 @@ async function request<T>(
   allowRetry = true,
 ): Promise<T> {
   const { method = "GET", body } = options;
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const headers: Record<string, string> = {};
   const token = getAccessToken();
   if (token) headers["Authorization"] = `Bearer ${token}`;
+
+  // FormData（文件上传）：由浏览器自动生成 multipart 边界，不得手动设 Content-Type
+  const isForm = body instanceof FormData;
+  if (!isForm) headers["Content-Type"] = "application/json";
 
   const resp = await fetch(`${API_BASE}${path}`, {
     method,
     headers,
     credentials: "include",
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: body === undefined ? undefined : isForm ? (body as FormData) : JSON.stringify(body),
   });
 
   // 401 且允许重试：尝试刷新后重放原请求
@@ -304,3 +308,91 @@ export const articleApi = {
   publish: (id: number) =>
     request<null>(`/admin/articles/${id}/publish`, { method: "PUT" }),
 };
+
+// ---------- M6：仪表盘 / 媒体库 / 网站配置 / 改密码 ----------
+
+export interface DashboardStats {
+  products: number;
+  categories: { top: number; sub: number };
+  articles: { total: number; published: number };
+  banners: number;
+  media: { total: number; images: number; videos: number };
+  translation: { products_incomplete: number; articles_incomplete: number };
+  recent_audits: {
+    id: number;
+    operator: string;
+    action: string;
+    target_type: string;
+    target_id: string | null;
+    detail: Record<string, unknown>;
+    created_at: string;
+  }[];
+}
+
+export interface MediaItem {
+  id: number;
+  filename: string;
+  url: string;
+  type: "image" | "video";
+  size: number;
+  created_at: string;
+}
+
+export interface BannerPayload {
+  image_url: string;
+  title: { zh: string; en: string };
+  link_type: "product" | "article" | "url";
+  link_value: string;
+  sort: number;
+  enabled: boolean;
+}
+
+export interface SiteConfig {
+  contact: { phone: { zh: string; en: string }; email: string; address: { zh: string; en: string } };
+  seo: { title: { zh: string; en: string }; description: { zh: string; en: string }; keywords: { zh: string; en: string }; og_image: string };
+  switches: { show_price: boolean; show_new_tag: boolean };
+  featured_products: number[];
+}
+
+export const dashboardApi = {
+  stats: () => request<DashboardStats>("/admin/dashboard/stats"),
+};
+
+export const mediaApi = {
+  list: (params: { page?: number; page_size?: number; type?: string }) => {
+    const qs = new URLSearchParams();
+    if (params.page) qs.set("page", String(params.page));
+    if (params.page_size) qs.set("page_size", String(params.page_size));
+    if (params.type) qs.set("type", params.type);
+    const q = qs.toString();
+    return request<AdminPageData<MediaItem>>(`/admin/media${q ? `?${q}` : ""}`);
+  },
+  upload: (file: File) => {
+    // 上传走 FormData（不走 JSON request 封装）
+    const form = new FormData();
+    form.append("file", file);
+    return request<{ id: number; url: string; type: string; size: number; filename: string }>(
+      "/admin/media/upload",
+      { method: "POST", body: form },
+    );
+  },
+  remove: (id: number) => request<null>(`/admin/media/${id}`, { method: "DELETE" }),
+};
+
+export const bannerApi = {
+  list: () => request<(BannerPayload & { id: number })[]>("/admin/banners"),
+  create: (body: BannerPayload) => request<{ id: number }>("/admin/banners", { method: "POST", body }),
+  update: (id: number, body: BannerPayload) => request<null>(`/admin/banners/${id}`, { method: "PUT", body }),
+  remove: (id: number) => request<null>(`/admin/banners/${id}`, { method: "DELETE" }),
+};
+
+export const siteConfigApi = {
+  get: () => request<SiteConfig>("/admin/site-config"),
+  update: (body: Partial<SiteConfig>) => request<null>("/admin/site-config", { method: "PUT", body }),
+};
+
+export const changePassword = (old_password: string, new_password: string) =>
+  request<null>("/admin/auth/change-password", {
+    method: "POST",
+    body: { old_password, new_password },
+  });
