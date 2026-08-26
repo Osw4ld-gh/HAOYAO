@@ -15,8 +15,10 @@ import type { ProductCard as ProductCardType } from "@/lib/api/types";
 interface ProductCardProps {
   product: ProductCardType;
   locale: "zh" | "en";
-  /** 是否显示价格（M4 接入 site_config.switches.show_price） */
+  /** 是否显示价格（M6：site_config.switches.show_price；缺省 true） */
   showPrice?: boolean;
+  /** 是否显示新品标签（M6：site_config.switches.show_new_tag；缺省 true） */
+  showNewTag?: boolean;
 }
 
 /** 分（后端存储）→ 元（展示） */
@@ -24,7 +26,7 @@ function fenToYuan(fen: number): string {
   return (fen / 100).toFixed(2);
 }
 
-export default function ProductCard({ product, locale, showPrice = true }: ProductCardProps) {
+export default function ProductCard({ product, locale, showPrice = true, showNewTag = true }: ProductCardProps) {
   const prefix = locale === "en" ? "/en" : "";
   // 详情路由：/{top_slug}/p/{id}（技术文档 §7.1；缺省回退 skincare）
   const topSlug = product.top_slug ?? "skincare";
@@ -80,8 +82,8 @@ export default function ProductCard({ product, locale, showPrice = true }: Produ
             HAOYAO
           </div>
         )}
-        {/* 新品标签（红色点缀，UI 规范 §2.1） */}
-        {product.is_new && (
+        {/* 新品标签（红色点缀，UI 规范 §2.1；M6 接 site_config.switches.show_new_tag） */}
+        {product.is_new && showNewTag && (
           <span
             style={{
               position: "absolute",

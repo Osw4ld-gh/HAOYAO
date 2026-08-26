@@ -1,20 +1,30 @@
 // ============================================================================
 // HAOYAO 前台页脚 Footer（components/front/Footer.tsx）
 // 功能：4 列页脚 —— 品牌 / 加入我们 / 关于 HAOYAO / 客户服务（PRD §4.5 决策）。
-// 说明：M3 为静态链接占位；M4 接入 site_setting.contact 动态数据。
+// 说明：M6 接入 site_config.contact：电话/邮箱/地址从后台读取。
 // ============================================================================
 
 import Link from "next/link";
 
 import { t } from "@/lib/i18n";
 
+interface ContactInfo {
+  phone: { zh: string; en: string };
+  email: string;
+  address: { zh: string; en: string };
+}
+
 interface FooterProps {
   locale: "zh" | "en";
+  /** 联系方式（来自 site_config.contact，缺省 fallback 字符串） */
+  contact?: ContactInfo;
 }
 
 const isEn = (locale: "zh" | "en") => locale === "en";
 
-export default function Footer({ locale }: FooterProps) {
+export default function Footer({ locale, contact }: FooterProps) {
+  // 联系方式：邮箱从 site_config.contact 动态读取（电话/地址在 about/contact 页展示）
+  const email = contact?.email || "service@haoyao.com";
   return (
     <footer
       style={{
@@ -71,7 +81,7 @@ export default function Footer({ locale }: FooterProps) {
             {isEn(locale) ? t("footer.service", locale).toUpperCase() : t("footer.service", locale)}
           </div>
           <div style={{ fontSize: 13, lineHeight: 2.2, color: "var(--side-ink)" }}>
-            {isEn(locale) ? "service@haoyao.com" : "service@haoyao.com"}
+            {email}
             <br />
             {t("footer.serviceHours", locale)}
           </div>

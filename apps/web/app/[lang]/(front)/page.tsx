@@ -5,6 +5,7 @@ import Carousel from "@/components/front/Carousel";
 import ProductCard from "@/components/front/ProductCard";
 import { t } from "@/lib/i18n";
 import { fetchPublic } from "@/lib/api/client";
+import { getSiteConfig } from "@/lib/api/site_config";
 import type { HomeData } from "@/lib/api/types";
 
 // ============================================================================
@@ -40,6 +41,8 @@ interface HomePageProps {
 export default async function HomePage({ params }: HomePageProps) {
   const { lang } = await params;
   const locale = lang === "en" ? "en" : "zh";
+  // M6 站点配置：驱动产品卡（价格/新品）显示开关
+  const siteConfig = await getSiteConfig();
   const prefix = locale === "en" ? "/en" : "";
 
   // 首页聚合数据（ISR 60s，与页面 revalidate 对齐）
@@ -89,7 +92,7 @@ export default async function HomePage({ params }: HomePageProps) {
           />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)" }}>
             {newProducts.map((product) => (
-              <ProductCard key={product.id} product={product} locale={locale} />
+              <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}
           </div>
         </section>

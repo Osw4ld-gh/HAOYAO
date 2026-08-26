@@ -74,8 +74,13 @@ export interface ArticleCard {
   published_at: string;
 }
 
-/** 网站配置（显示开关等，技术文档 §6.4.5） */
+/** 网站配置（M6：contact/seo/switches/featured_products 4 键） */
 export interface SiteConfig {
+  contact?: {
+    phone: Bilingual;
+    email: string;
+    address: Bilingual;
+  };
   switches: {
     show_price: boolean;
     show_new_tag: boolean;
@@ -86,6 +91,7 @@ export interface SiteConfig {
     keywords: Bilingual;
     og_image: string;
   };
+  featured_products?: number[];
 }
 
 /** 分类节点（技术文档 §6.4.5 categories） */

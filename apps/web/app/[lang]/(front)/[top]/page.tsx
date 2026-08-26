@@ -5,6 +5,7 @@ import ProductCard from "@/components/front/ProductCard";
 import { Breadcrumb, Pagination, TabBar, type TabItem } from "@/components/front/Ui";
 import { t } from "@/lib/i18n";
 import { fetchPublic } from "@/lib/api/client";
+import { getSiteConfig } from "@/lib/api/site_config";
 import type { CategoryNode, PageData, ProductCard as ProductCardType } from "@/lib/api/types";
 
 // ============================================================================
@@ -56,6 +57,8 @@ export default async function TopCategoryPage({ params, searchParams }: TopPageP
   const locale = lang === "en" ? "en" : "zh";
   const prefix = locale === "en" ? "/en" : "";
 
+  // M6 站点配置：驱动产品卡（价格/新品）显示开关
+  const siteConfig = await getSiteConfig();
   // 顶层白名单校验
   if (!TOP_SLUGS.includes(top)) notFound();
 
@@ -123,7 +126,7 @@ export default async function TopCategoryPage({ params, searchParams }: TopPageP
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)" }}>
             {items.map((product) => (
-              <ProductCard key={product.id} product={product} locale={locale} />
+              <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}
           </div>
           {/* 分页（?page=N） */}

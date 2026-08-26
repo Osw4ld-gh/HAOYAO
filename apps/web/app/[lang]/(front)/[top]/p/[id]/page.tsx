@@ -7,6 +7,7 @@ import { Breadcrumb } from "@/components/front/Ui";
 import WhereToBuy from "@/components/front/WhereToBuy";
 import { t } from "@/lib/i18n";
 import { fetchPublic } from "@/lib/api/client";
+import { getSiteConfig } from "@/lib/api/site_config";
 import type { ProductDetail } from "@/lib/api/types";
 
 // ============================================================================
@@ -62,6 +63,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // 顶层白名单（路由前缀随 top_slug，技术文档 §7.1）
   if (!TOP_SLUGS.includes(top)) notFound();
+
+  // M6 站点配置：驱动相关推荐产品卡（价格/新品）显示开关
+  const siteConfig = await getSiteConfig();
 
   // 详情（ISR 60s；404 时渲染 404）
   const detail = await fetchPublic<ProductDetail>(`/products/${id}`, {
@@ -200,7 +204,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <SectionLabel text={t("detail.related", locale)} size="large" />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)", marginTop: 28 }}>
             {detail.related.map((product) => (
-              <ProductCard key={product.id} product={product} locale={locale} />
+              <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}
           </div>
         </section>

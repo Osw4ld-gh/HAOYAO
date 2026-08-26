@@ -3,13 +3,15 @@ import type { Metadata } from "next";
 import Footer from "@/components/front/Footer";
 import Header from "@/components/front/Header";
 import { fetchPublic } from "@/lib/api/client";
+import { getSiteConfig } from "@/lib/api/site_config";
 import type { NavNode } from "@/lib/api/types";
 
 // ============================================================================
 // HAOYAO 前台布局（app/[lang]/layout.tsx）
 // 功能：前台语言级布局 —— 主导航（SSR 实时）+ 内容区 + 4 列页脚。
 // 说明：
-//   - 导航数据服务端拉取（revalidate=0 即 SSR 实时，后台修改即时生效）
+//   - 导航/site-config 服务端拉取（revalidate=0 即 SSR 实时，后台修改即时生效）
+//   - site_config.contact 传入 Footer（电话/邮箱/地址动态渲染）
 //   - <html lang> 由根布局（app/layout.tsx）承载
 // ============================================================================
 
@@ -34,12 +36,14 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
   const navItems = await fetchPublic<NavNode[]>("/navigation", { revalidate: 0 }).catch(
     () => [] as NavNode[],
   );
+  // site-config：用于 Footer 联系方式（SSR 实时）
+  const siteConfig = await getSiteConfig();
 
   return (
     <div className="front-shell">
       <Header navItems={navItems} locale={locale} />
       <main>{children}</main>
-      <Footer locale={locale} />
+      <Footer locale={locale} contact={siteConfig.contact} />
     </div>
   );
 }
