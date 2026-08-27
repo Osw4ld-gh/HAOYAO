@@ -170,7 +170,16 @@ export default async function HomePage({ params }: HomePageProps) {
                 <div style={{ fontSize: 12, letterSpacing: "0.2em", color: "var(--ink-3)" }}>
                   {article.category === "company" ? t("home.companyNews", locale) : t("home.industryNews", locale)}
                 </div>
-                <div style={{ marginTop: 10, fontSize: 17, letterSpacing: "0.06em", color: "var(--ink)" }}>
+                <div
+                  style={{
+                    marginTop: 10,
+                    fontFamily: "var(--font-serif)",
+                    fontSize: 18,
+                    fontWeight: 500,
+                    letterSpacing: "0.06em",
+                    color: "var(--ink)",
+                  }}
+                >
                   {locale === "en" ? article.title.en || article.title.zh : article.title.zh}
                 </div>
               </Link>

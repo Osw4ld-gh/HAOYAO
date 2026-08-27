@@ -159,7 +159,32 @@ button {
     --grid-gap: 16px;
     --footer-grid: 1fr;
   }
-  /* 移动汉堡显示（桌面 nav 已在第二行 .desktop-nav-row 控制） */
+  /* 滚动收起：第二行导航 + topbar 收起；header 仍显示（CHANEL 风格） */
+  .site-header.compact .desktop-nav-row {
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    opacity: 0 !important;
+    border-bottom-color: transparent !important;
+  }
+  .site-header.compact .site-header-grid {
+    height: 56px !important;
+  }
+  /* 移动端：compact 时整条向上收起 */
+  .site-header.compact.is-mobile-hidden {
+    transform: translateY(-100%);
+  }
+  /* 前台页面 h1/h2/h3 默认衬线化（对齐原型 v2 全站衬线风格；后台 .admin-root 排除） */
+.front-shell h1,
+.front-shell h2,
+.front-shell h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+}
+
+/* 移动汉堡显示（桌面 nav 已在第二行 .desktop-nav-row 控制） */
   .mobile-menu-btn {
     display: flex !important;
   }

@@ -43,16 +43,21 @@ function languageHref(pathname: string, locale: "zh" | "en"): string {
 
 export default function Header({ navItems, locale }: HeaderProps) {
   const pathname = usePathname();
-  const [hidden, setHidden] = useState(false);
+  const [compact, setCompact] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // 滚动收起（260/60 宽滞回 + 180ms 过渡，原型 v2 参数）
+  // 滚动收起（v2 原型 + CHANEL 风格）
+  // - 桌面端：滚动 ≥260 → compact 态，第二行导航收起，header 仍 sticky 显示
+  // - 移动端：compact 态叠加 is-mobile-hidden 类，整条 header 向上收起
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      // 260/60 宽滞回：越过阈值才切换，避免快速滚动抖动
-      if (y > 260) setHidden(true);
-      else if (y < 60) setHidden(false);
+      // 宽滞回（260/60）避免抖动
+      setCompact((prev) => {
+        if (y > 260 && !prev) return true;
+        if (y < 60 && prev) return false;
+        return prev;
+      });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -72,8 +77,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
 
   return (
     <>
-      {/* 主导航栏：滚动时向上收起 */}
+      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（桌面仅收起第二行 nav；移动端整条收起） */}
       <header
+        className={`site-header ${compact ? "compact" : ""}`}
         style={{
           position: "sticky",
           top: 0,
@@ -81,8 +87,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
           background: "rgba(247,244,239,0.96)",
           backdropFilter: "blur(8px)",
           borderBottom: "1px solid var(--line)",
-          transform: hidden ? "translateY(-100%)" : "translateY(0)",
-          transition: "transform var(--dur-nav) var(--ease-brand)",
+          transition:
+            "box-shadow 0.3s var(--ease-brand), transform var(--dur-nav) var(--ease-brand)",
+          boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
         <div
