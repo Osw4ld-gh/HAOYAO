@@ -89,9 +89,7 @@ button {
 
 /* Header 响应式：grid 默认 auto 1fr auto（三段：左段 / 中间 1fr 占空间 / 右段）——HAOYAO col 2 justifySelf center 居中，☰ col 1 紧贴最左，桌面 nav / 语言切换 col 3 紧贴 HAOYAO 右侧；
    ≤1023px（平板+移动）全部改用汉堡菜单，桌面 nav 与第二行隐藏，仅显示 ☰ 在 col 1 */
-.site-header-grid {
-  grid-template-columns: auto 1fr auto;
-}
+/* .site-header-grid grid-template-columns 由 JSX 内联提供（最高优先级，避免被多次定义覆盖） */
 
 .desktop-nav,
 .desktop-nav-row {
