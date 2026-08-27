@@ -96,10 +96,10 @@ button {
 
 /* ============================================================================
  * Header 响应式（v2 prototype 三层结构 + mobile-first）：
- * - 默认（≤1023）：显示 .site-header-grid（☰ + HAOYAO 居中），隐藏 .logo-row / .main-nav
- * - ≥1024：切换为 v2 三层（.logo-row + .main-nav），隐藏 .site-header-grid
+ * - 默认（≤1023）：显示 .site-header-grid（☰ + HAOYAO 居中），隐藏 .topbar / .logo-row / .main-nav
+ * - ≥1024：切换为 v2 三层（.topbar + .logo-row + .main-nav），隐藏 .site-header-grid
  *
- * 注：v2 prototype 的 .topbar 层不做（无合适辅助链接内容——PRD 不做会员/门店/搜索）
+ * v2 prototype 的 .topbar 右辅助链接（联系我们/email）PRD 不做——right 空
  * ========================================================================== */
 .mobile-menu-btn {
   display: flex;        /* mobile 默认显示 */
@@ -107,6 +107,7 @@ button {
 .site-header-grid {
   display: flex;
 }
+.topbar,
 .logo-row,
 .main-nav {
   display: none;        /* mobile 默认隐藏 */
@@ -266,45 +267,105 @@ button {
 
 /* ============================================================================
  * 桌面（≥1024）v2 prototype Header 三层结构：
- * - .logo-row    HAOYAO 28px + 副标题"皓遥 · SINCE 2024" 11px
+ * - .topbar      lang 切换（中文 | EN）紧贴最左 + 右空；compact 时整行收起
+ * - .logo-row    HAOYAO（block, text-align:center）+ 副标题（block small）垂直排列
+ *                副标题内容：中文"皓遥 · 皓启纯净 遥见本真" / 英文"Purity Begins, Truth Revealed"
  * - .main-nav    6 菜单居中，gap 8px，padding 0 0 14px，max-height 60px
  *
  * compact 态（scrollY > 260）：
- * - .logo-row padding 22-18 → 10-0
- * - .logo 字号 28 → 20
- * - .logo-sub (副标题) max-height 0 隐藏
- * - .main-nav max-height 0 收起
+ * - .topbar      max-height 0 + padding 0 + opacity 0（lang 也收起）
+ * - .logo-row    padding 22-18 → 10-0
+ * - .logo        字号 clamp(26,3vw,34) → 20
+ * - .logo-sub    max-height 0 + opacity 0 + margin 0（副标题收）
+ * - .main-nav    max-height 0 + padding 0 + opacity 0
  * - header 仍 sticky 显示（CHANEL 风格）
  * ========================================================================== */
 @media (min-width: 1024px) {
-  .logo-row {
-    display: block;
-    padding: 22px 0 18px;
-    text-align: center;
+  /* ---------- topbar：左 lang 切换（紧贴最左）---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-2);
     border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    max-height: 60px;
+    transition:
+      max-height 0.18s var(--ease-brand),
+      padding 0.18s var(--ease-brand),
+      opacity 0.18s var(--ease-brand),
+      border-color 0.18s var(--ease-brand);
+  }
+  .topbar-lang {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .topbar-lang-btn {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--ink-3);
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s var(--ease-brand);
+  }
+  .topbar-lang-btn:hover,
+  .topbar-lang-btn.is-active {
+    color: var(--gold-deep);
+  }
+  .topbar-lang-div {
+    width: 1px;
+    height: 10px;
+    background: var(--line);
+  }
+  /* compact 态 topbar 整行收起（v2 prototype spec） */
+  .site-header.compact .topbar {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    border-color: transparent;
+  }
+
+  /* ---------- logo-row：HAOYAO 上 + 副标题下 ---------- */
+  .logo-row {
+    display: flex;
+    justify-content: center;
+    padding: 22px 0 18px;
+    align-items: center;
     transition: padding 0.18s var(--ease-brand);
   }
   .logo {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 14px;
+    display: block;                 /* block 容器，HAOYAO 和 small 都 text-align center */
     font-family: var(--font-serif);
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: 0.4em;
-    text-indent: 0.4em;          /* 衬线字体右偏补偿——视觉居中 */
-    line-height: 1;
+    font-weight: 600;
+    font-size: clamp(26px, 3vw, 34px);  /* v2 spec：随宽度变化 */
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
     color: var(--ink);
-    transition:
-      font-size 0.18s var(--ease-brand),
-      letter-spacing 0.18s var(--ease-brand);
+    cursor: pointer;
+    line-height: 1;
+    text-align: center;
+    transition: font-size 0.18s var(--ease-brand);
   }
   .logo-sub {
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.32em;
-    color: var(--ink-3);
-    max-height: 24px;
+    display: block;                 /* block 强制换行到 HAOYAO 下方 */
+    text-align: center;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 10px;
+    letter-spacing: 0.62em;
+    text-indent: 0.62em;
+    color: var(--gold-deep);
+    margin-top: 8px;
+    max-height: 30px;
     overflow: hidden;
     opacity: 1;
     transition:
@@ -312,6 +373,22 @@ button {
       opacity 0.18s var(--ease-brand),
       margin 0.18s var(--ease-brand);
   }
+  /* compact 态：logo-row padding 收缩 + HAOYAO 字号缩 + 副标题 max-height 0 */
+  .site-header.compact .logo-row {
+    padding: 10px 0;
+  }
+  .site-header.compact .logo {
+    font-size: 20px;
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+  }
+  .site-header.compact .logo-sub {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+  }
+
+  /* ---------- main-nav：6 菜单居中 ---------- */
   .main-nav {
     display: flex;
     justify-content: center;
@@ -357,18 +434,7 @@ button {
     color: var(--gold-deep);
   }
 
-  /* compact 态：v2 spec */
-  .site-header.compact .logo-row {
-    padding: 10px 0;
-  }
-  .site-header.compact .logo {
-    font-size: 20px;
-  }
-  .site-header.compact .logo-sub {
-    max-height: 0;
-    opacity: 0;
-    margin: 0;
-  }
+  /* compact 态：v2 spec（main-nav 收起到 max-height:0） */
   .site-header.compact .main-nav {
     max-height: 0;
     padding-top: 0;

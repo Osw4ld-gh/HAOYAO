@@ -85,9 +85,15 @@ export default function Header({ navItems, locale }: HeaderProps) {
     };
   }, [drawerOpen]);
 
+  // 语言切换：点击 .topbar-lang-btn 直接跳到等价路由（保留当前页面路径）
+  const switchLocale = (target: "zh" | "en") => {
+    if (target === locale) return;
+    window.location.href = languageHref(pathname, target);
+  };
+
   // className 组合：
   //   - always: site-header
-  //   - compact: ".compact"（logo-row 收缩 + main-nav 收起 + HAOYAO 字号缩）
+  //   - compact: ".compact"（topbar + logo-row 收缩 + main-nav 收起 + HAOYAO 字号缩）
   //   - compact + isMobile: ".is-mobile-hidden"（移动端整条 translateY 隐藏）
   const headerClass = [
     "site-header",
@@ -102,7 +108,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
   return (
     <>
       {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact
-          - 桌面（≥1024）：v2 三层（logo-row + main-nav）→ CHANEL 风格收
+          - 桌面（≥1024）：v2 三层（topbar + logo-row + main-nav）→ CHANEL 风格收
           - 移动（≤1023）：site-header-grid（☰ + HAOYAO）→ 整条 translateY */}
       <header
         className={headerClass}
@@ -118,11 +124,35 @@ export default function Header({ navItems, locale }: HeaderProps) {
           boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
-        {/* ============ 桌面（≥1024）v2 三层：logo-row + main-nav ============ */}
+        {/* ============ 桌面（≥1024）v2 三层：topbar + logo-row + main-nav ============ */}
+        {/* topbar：左 lang 切换（紧贴最左，space-between 时左边顶到左缘），
+            右空（v2 prototype 是"联系我们/email"——PRD 不做） */}
+        <div className="topbar">
+          <div className="topbar-lang" aria-label="Language">
+            <button
+              className={`topbar-lang-btn ${locale === "zh" ? "is-active" : ""}`}
+              onClick={() => switchLocale("zh")}
+              data-lang="zh"
+              type="button"
+            >
+              中文
+            </button>
+            <span className="topbar-lang-div" aria-hidden="true" />
+            <button
+              className={`topbar-lang-btn ${locale === "en" ? "is-active" : ""}`}
+              onClick={() => switchLocale("en")}
+              data-lang="en"
+              type="button"
+            >
+              EN
+            </button>
+          </div>
+        </div>
+
+        {/* logo-row：HAOYAO（block, text-align:center）上 + 副标题（block small）下 垂直排列 */}
         <div className="logo-row">
           <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
-            <span className="logo-name">HAOYAO</span>
-            <small className="logo-sub">{t("brand.since", locale)}</small>
+            HAOYAO<small className="logo-sub">{t("brand.tagline", locale)}</small>
           </Link>
         </div>
         <nav className="main-nav" aria-label="Main navigation">
