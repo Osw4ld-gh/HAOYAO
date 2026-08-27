@@ -112,6 +112,8 @@ export default async function HomePage({ params }: HomePageProps) {
             eyebrow="New Arrivals"
             title={t("home.newProducts", locale)}
             subtitle={t("home.newProductsSub", locale)}
+            linkText={t("home.viewAll", locale)}
+            linkHref={`${prefix}/category/skincare`}
           />
           <div style={{ display: "grid", gridTemplateColumns: "var(--grid-products)", gap: "var(--grid-gap)" }}>
             {newProducts.map((product) => (
@@ -207,44 +209,89 @@ export default async function HomePage({ params }: HomePageProps) {
   );
 }
 
-/** 区块标题（英文小标 + 中文标题 + 副标题，UI 规范 §2.2 eyebrow / v2 原型 §section-head） */
-function SectionHead({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
+/** 区块标题（英文小标 + 中文标题 + 副标题 + 可选 link-more 右链）
+ *  UI 规范 §2.2 eyebrow / v2 原型 §section-head */
+function SectionHead({ eyebrow, title, subtitle, linkText, linkHref }: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  linkText?: string;
+  linkHref?: string;
+}) {
+  const hasLink = Boolean(linkText && linkHref);
   return (
-    <div style={{ marginBottom: "var(--section-head-gap)", textAlign: "center" }}>
-      <div
-        style={{
-          fontFamily: "var(--font-serif)",
-          fontSize: "var(--fs-eyebrow)",
-          letterSpacing: "0.32em",
-          color: "var(--gold-deep)",
-          textTransform: "uppercase",
-        }}
-      >
-        {eyebrow}
-      </div>
-      <h2
-        style={{
-          marginTop: 12,
-          fontFamily: "var(--font-serif)",
-          fontSize: "var(--fs-h2)",
-          fontWeight: 400,
-          letterSpacing: "0.15em",
-          color: "var(--ink)",
-        }}
-      >
-        {title}
-      </h2>
-      {subtitle && (
+    <div
+      style={{
+        marginBottom: "var(--section-head-gap)",
+        display: "flex",
+        flexDirection: hasLink ? "row" : "column",
+        justifyContent: hasLink ? "space-between" : "center",
+        alignItems: hasLink ? "flex-end" : "center",
+        gap: hasLink ? 24 : 0,
+        textAlign: "center",
+      }}
+    >
+      {/* 左侧：eyebrow + 标题 + 副标题（垂直堆叠） */}
+      <div style={{ flex: hasLink ? 1 : undefined }}>
         <div
           style={{
-            marginTop: 10,
-            fontSize: 13,
-            letterSpacing: "0.14em",
-            color: "var(--ink-2)",
+            fontFamily: "var(--font-serif)",
+            fontSize: "var(--fs-eyebrow)",
+            letterSpacing: "0.32em",
+            color: "var(--gold-deep)",
+            textTransform: "uppercase",
           }}
         >
-          {subtitle}
+          {eyebrow}
         </div>
+        <h2
+          style={{
+            marginTop: 12,
+            fontFamily: "var(--font-serif)",
+            fontSize: "var(--fs-h2)",
+            fontWeight: 400,
+            letterSpacing: "0.15em",
+            color: "var(--ink)",
+          }}
+        >
+          {title}
+        </h2>
+        {subtitle && (
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 13,
+              letterSpacing: "0.14em",
+              color: "var(--ink-2)",
+            }}
+          >
+            {subtitle}
+          </div>
+        )}
+      </div>
+      {/* 右侧：link-more 右链（v2 prototype 风格） */}
+      {hasLink && (
+        <Link
+          href={linkHref!}
+          className="link-more"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 12,
+            letterSpacing: "0.28em",
+            textTransform: "uppercase",
+            color: "var(--ink)",
+            whiteSpace: "nowrap",
+            paddingBottom: 8,    /* 与 h2 baseline 对齐 */
+            transition: "color 0.3s var(--ease-brand)",
+          }}
+        >
+          {linkText}
+          <svg width="18" height="10" viewBox="0 0 18 10" fill="none" aria-hidden="true">
+            <path d="M13 1l4 4-4 4M17 5H1" stroke="currentColor" strokeWidth="1" />
+          </svg>
+        </Link>
       )}
     </div>
   );

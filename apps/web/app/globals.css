@@ -284,11 +284,13 @@ button {
     position: relative;                /* HAOYAO absolute 居中需要 */
     transition: padding 0.18s var(--ease-brand);
   }
-  /* 左 lang 切换：flex 自然流在 logo-row 最左；gap 14px（无 divider，user 明确要求） */
+  /* 左 lang 切换：flex 自然流在 logo-row 最左；gap 14px（无 divider，user 明确要求）；
+     padding-left 让 lang 距 viewport 左缘 40px（对齐 1320px 容器左 padding） */
   .logo-row-lang {
     display: flex;
     gap: 14px;
     align-items: center;
+    padding-left: 40px;
     font-size: 11px;
     letter-spacing: 0.2em;
   }
