@@ -92,7 +92,6 @@ export default function Header({ navItems, locale }: HeaderProps) {
             margin: "0 auto",
             padding: "0 var(--container-pad)",
             display: "grid",
-            gridTemplateColumns: "1fr auto 1fr",
             alignItems: "center",
             gap: 24,
             height: 72,
