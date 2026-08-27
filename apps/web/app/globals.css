@@ -416,6 +416,14 @@ button {
     border-bottom-color: transparent;
   }
 
+  /* ⚠️ DEBUG 临时规则（M9 排查）：compact 触发时给 header 加醒目边框，
+     让用户能立刻判断 CSS 是否真的加载——若滚到 >260 看到红色边框 = CSS 生效，问题在 JS/状态；
+     若没看到边框 = CSS 没加载，问题在 dev server hot-reload */
+  .site-header.compact {
+    outline: 3px solid red !important;
+    outline-offset: -3px;
+  }
+
   /* 隐藏 mobile markup */
   .site-header-grid,
   .mobile-menu-btn {

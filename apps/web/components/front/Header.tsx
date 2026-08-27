@@ -69,13 +69,15 @@ export default function Header({ navItems, locale }: HeaderProps) {
       setCompact((prev) => {
         if (y > 260 && !prev) {
           if (process.env.NODE_ENV === "development") {
-            console.log(`[Header scroll] compact: false → true at y=${y}`);
+            const h = document.querySelector(".site-header")?.getBoundingClientRect().height;
+            console.log(`[Header scroll] compact: false → true at y=${y}, header height=${h}px`);
           }
           return true;
         }
         if (y < 60 && prev) {
           if (process.env.NODE_ENV === "development") {
-            console.log(`[Header scroll] compact: true → false at y=${y}`);
+            const h = document.querySelector(".site-header")?.getBoundingClientRect().height;
+            console.log(`[Header scroll] compact: true → false at y=${y}, header height=${h}px`);
           }
           return false;
         }
