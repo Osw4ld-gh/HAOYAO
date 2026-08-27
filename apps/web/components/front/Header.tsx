@@ -51,12 +51,13 @@ export default function Header({ navItems, locale }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 当前是否 ≤1023px
+  // 当前是否 ≤767px（断点跟 globals.css 同步从 1023 降到 767，
+  // 让 user 在 docked DevTools 下（viewport ≈ 800-1023）也能看到桌面 v2 spec 效果）
   // 用 window.innerWidth 而非 matchMedia：Edge DevTools docked 模式下两者不一致（视觉视口 < innerWidth），
   // 直接用 innerWidth 让 JS state 更贴近 CSS 媒体查询行为
   useEffect(() => {
     const update = () => {
-      const v = window.innerWidth <= 1023;
+      const v = window.innerWidth <= 767;
       setIsMobile(v);
     };
     update();

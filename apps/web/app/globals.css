@@ -274,7 +274,7 @@ button {
  * - .main-nav    max-height 0 + padding 0 + opacity 0
  * - header 仍 sticky 显示（CHANEL 风格）
  * ========================================================================== */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   /* ---------- logo-row：左 lang 切换 + HAOYAO 居中（absolute）+ 副标题下 ---------- */
   .logo-row {
     display: flex;
@@ -411,10 +411,11 @@ button {
 }
 
 /* ============================================================================
- * 移动（≤1023）：site-header-grid 主体（☰ + HAOYAO 居中）
+ * 移动（≤767）：site-header-grid 主体（☰ + HAOYAO 居中）
  * - HAOYAO 字号 20px（比桌面紧凑，64px 高度更协调）
+ * - 断点从 1023 降到 767：让 user 在 docked DevTools 下（viewport ≈ 800-1023）也能看到桌面 v2 spec
  * ========================================================================== */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .brand-logo {
     font-size: 20px;
     letter-spacing: 0.32em;
