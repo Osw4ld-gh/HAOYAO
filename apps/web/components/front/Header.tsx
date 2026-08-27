@@ -2,13 +2,13 @@
 
 // ============================================================================
 // HAOYAO 前台主导航 Header（components/front/Header.tsx）
-// 功能：
-//   - v2 prototype 三层结构（topbar 去除，保留 logo-row + main-nav）
-//   - 桌面（≥1024）：logo-row（HAOYAO 28px + 副标题 11px）+ main-nav（6 菜单 14px）
+// 功能（CHANEL 风格 + user 最新要求）：
+//   - 桌面（≥1024）：两层 header——第一行 HAOYAO（serif 大字，居中）+ lang 切换（右上，无 divider）；
+//                    第二行 6 nav 居中。
+//                    compact 态（scrollY > 260）：第二行 nav 收，第一行 HAOYAO 永远保持原大小（CHANEL 风不缩字号）
 //   - 移动（≤1023）：site-header-grid（☰ + HAOYAO 居中）+ 汉堡抽屉
-//   - 滚动收起：scrollY > 260 触发 .compact（CHANEL 风格：仅 logo-row + main-nav 收缩，
-//     HAOYAO 字号 28→20、副标题隐藏、main-nav max-height 0；header 仍 sticky 显示）
-// 依据：UI 规范 §3.1 / 原型 v2；导航数据由 [lang]/layout（服务端）传入。
+//                    compact 态：header height 64→40 + HAOYAO 字号缩（CHANEL mobile 风）
+// 依据：UI 规范 §3.1 / CHANEL 风格 / PRD V1 不做会员/搜索/收藏（只保留 HAOYAO + lang + nav）
 // ============================================================================
 
 import Link from "next/link";
@@ -52,17 +52,16 @@ export default function Header({ navItems, locale }: HeaderProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   // 当前是否 ≤1023px
-  // 初始值 false（SSR 一致 + 避免 hydration mismatch）；mount 后立即根据 matchMedia 同步
+  // 用 window.innerWidth 而非 matchMedia：Edge DevTools docked 模式下两者不一致（视觉视口 < innerWidth），
+  // 直接用 innerWidth 让 JS state 更贴近 CSS 媒体查询行为
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
     const update = () => {
-      const v = mq.matches;
-      console.log(`[Header mq] isMobile=${v}, innerWidth=${window.innerWidth}`);
+      const v = window.innerWidth <= 1023;
       setIsMobile(v);
     };
-    update();   // mount 立即同步（不再等 scroll 事件）
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   // 滚动收起（v2 原型 spec：CHANEL 风格，仅 logo-row 收缩 + main-nav 收 + HAOYAO 字号缩）
@@ -146,21 +145,27 @@ export default function Header({ navItems, locale }: HeaderProps) {
           boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
-        {/* ============ 桌面（≥1024）logo-row + main-nav ============ */}
-        {/* logo-row：左 lang 切换（紧贴最左）+ HAOYAO 居中（absolute）+ 副标题下垂直排列
-            用户明确要求：lang 跟 HAOYAO 同一行（不放 topbar 独立行） + 无 divider */}
-        <div className="logo-row">
-          <div className="logo-row-lang" aria-label="Language">
+        {/* ============ 桌面（≥1024）CHANEL 风格 header ============ */}
+        {/* 结构：两行
+            第一行 .header-row：HAOYAO（serif大字，居中）+ lang 切换（紧贴右上，无 divider）
+            第二行 .main-nav：6 nav 居中
+            compact 态（CHANEL 风）：第二行收，第一行 HAOYAO 永远保持原大小（CHANEL 风不缩字号） */}
+        <div className="header-row">
+          <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
+            HAOYAO
+          </Link>
+          <div className="header-tools" aria-label="Language">
             <button
-              className={`logo-row-lang-btn ${locale === "zh" ? "is-active" : ""}`}
+              className={`header-lang-btn ${locale === "zh" ? "is-active" : ""}`}
               onClick={() => switchLocale("zh")}
               data-lang="zh"
               type="button"
             >
               中文
             </button>
+            <span className="header-lang-div" aria-hidden="true" />
             <button
-              className={`logo-row-lang-btn ${locale === "en" ? "is-active" : ""}`}
+              className={`header-lang-btn ${locale === "en" ? "is-active" : ""}`}
               onClick={() => switchLocale("en")}
               data-lang="en"
               type="button"
@@ -168,9 +173,6 @@ export default function Header({ navItems, locale }: HeaderProps) {
               EN
             </button>
           </div>
-          <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
-            HAOYAO<small className="logo-sub">{t("brand.tagline", locale)}</small>
-          </Link>
         </div>
         <nav className="main-nav" aria-label="Main navigation">
           {navItems.map((item) => (
