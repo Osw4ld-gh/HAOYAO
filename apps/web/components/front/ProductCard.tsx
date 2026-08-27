@@ -105,7 +105,9 @@ export default function ProductCard({ product, locale, showPrice = true, showNew
       <div style={{ padding: "16px 4px 20px", textAlign: "center" }}>
         <div
           style={{
-            fontSize: 15,
+            fontFamily: "var(--font-serif)",
+            fontSize: 17,
+            fontWeight: 500,
             letterSpacing: "0.08em",
             color: "var(--ink)",
             overflow: "hidden",

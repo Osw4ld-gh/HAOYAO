@@ -189,10 +189,27 @@ export default async function HomePage({ params }: HomePageProps) {
 function SectionHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div style={{ marginBottom: "var(--section-head-gap)", textAlign: "center" }}>
-      <div style={{ fontSize: "var(--fs-eyebrow)", letterSpacing: "0.4em", color: "var(--gold-deep)" }}>
+      <div
+        style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "var(--fs-eyebrow)",
+          letterSpacing: "0.32em",
+          color: "var(--gold-deep)",
+          textTransform: "uppercase",
+        }}
+      >
         {eyebrow}
       </div>
-      <h2 style={{ marginTop: 12, fontSize: "var(--fs-h2)", fontWeight: 400, letterSpacing: "0.15em", color: "var(--ink)" }}>
+      <h2
+        style={{
+          marginTop: 12,
+          fontFamily: "var(--font-serif)",
+          fontSize: "var(--fs-h2)",
+          fontWeight: 400,
+          letterSpacing: "0.15em",
+          color: "var(--ink)",
+        }}
+      >
         {title}
       </h2>
     </div>
