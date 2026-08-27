@@ -87,6 +87,14 @@ button {
   transform: scale(1.05);
 }
 
+/* Header 响应式：默认桌面端显示导航、隐藏汉堡 */
+.desktop-nav {
+  display: flex !important;
+}
+.mobile-menu-btn {
+  display: none !important;
+}
+
 /* ============================================================================
  * 响应式断点（M7 专项：375 / 768 / 1024 / 1440 四档无横向溢出）
  * 说明：页面内联 grid 引用 var(--grid-*) 变量，由本文件按断点切换列数；

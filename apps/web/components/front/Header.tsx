@@ -105,7 +105,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
           </Link>
 
           {/* 主导航（桌面端；点击直达二级由各页面 Tab 承接） */}
-          <nav style={{ flex: 1, display: "flex", gap: 36, justifyContent: "center" }}>
+          <nav className="desktop-nav" style={{ flex: 1, display: "flex", gap: 36, justifyContent: "center" }}>
             {navItems.map((item) => (
               <Link
                 key={item.id}
