@@ -113,7 +113,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
             {t("nav.switchTo", locale)}
           </Link>
 
-          {/* HAOYAO logo 居中（flex auto margin） */}
+          {/* HAOYAO logo 居中（flex: 1 占满中间所有空间 + textAlign: center 让文本在容器中间居中） */}
           <Link
             href={locale === "en" ? "/en" : "/"}
             style={{
@@ -121,8 +121,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
               fontWeight: 600,
               letterSpacing: "0.28em",
               whiteSpace: "nowrap",
-              marginLeft: "auto",
-              marginRight: "auto",
+              flex: 1,
+              textAlign: "center",
             }}
           >
             HAOYAO
