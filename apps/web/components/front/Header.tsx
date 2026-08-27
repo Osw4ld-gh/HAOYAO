@@ -129,9 +129,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
   return (
     <>
       {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（CHANEL 风格：内容缩，不整条滑出）
-          - 桌面（≥1024）：v2 风格 logo-row（lang 左 + HAOYAO 居中 + 副标题下）+ main-nav 居中
-                          → logo-row padding 22-18→10-0 + HAOYAO 字号 28→20 + 副标题 max-height 0 + main-nav max-height 0
-          - 移动（≤1023）：site-header-grid（☰ + HAOYAO）→ height 64→40 + HAOYAO 字号缩 */}
+          - 桌面（≥768）：v2 风格 logo-row（lang 贴 viewport 左缘 + HAOYAO 居中 + 副标题下）+ main-nav 居中
+                          → CHANEL 风格：HAOYAO 字号不变 + nav 整行收起
+          - 移动（≤767）：site-header-grid（☰ + HAOYAO 居中） */}
       <header
         className={headerClass}
         style={{
@@ -140,33 +140,30 @@ export default function Header({ navItems, locale }: HeaderProps) {
           zIndex: "var(--z-nav)",
           background: "rgba(247,244,239,0.96)",
           backdropFilter: "blur(8px)",
+          borderTop: "1px solid var(--line)",     /* 顶部浅 border（视觉上让 header 与上方分隔） */
           borderBottom: "1px solid var(--line)",
           transition:
             "box-shadow 0.3s var(--ease-brand)",
           boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
-        {/* ============ 桌面（≥1024）CHANEL 风格 header ============ */}
-        {/* 结构：两行
-            第一行 .header-row：HAOYAO（serif大字，居中）+ lang 切换（紧贴右上，无 divider）
+        {/* ============ 桌面（≥768）CHANEL 风格 header ============ */}
+        {/* 结构：
+            第一行 .logo-row：左 lang 切换（紧贴 viewport 左缘）+ HAOYAO（absolute 居中）+ 副标题（small，居中，HAOYAO 下方）
             第二行 .main-nav：6 nav 居中
             compact 态（CHANEL 风）：第二行收，第一行 HAOYAO 永远保持原大小（CHANEL 风不缩字号） */}
-        <div className="header-row">
-          <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
-            HAOYAO
-          </Link>
-          <div className="header-tools" aria-label="Language">
+        <div className="logo-row">
+          <div className="logo-row-lang" aria-label="Language">
             <button
-              className={`header-lang-btn ${locale === "zh" ? "is-active" : ""}`}
+              className={`logo-row-lang-btn ${locale === "zh" ? "is-active" : ""}`}
               onClick={() => switchLocale("zh")}
               data-lang="zh"
               type="button"
             >
               中文
             </button>
-            <span className="header-lang-div" aria-hidden="true" />
             <button
-              className={`header-lang-btn ${locale === "en" ? "is-active" : ""}`}
+              className={`logo-row-lang-btn ${locale === "en" ? "is-active" : ""}`}
               onClick={() => switchLocale("en")}
               data-lang="en"
               type="button"
@@ -174,6 +171,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
               EN
             </button>
           </div>
+          <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
+            HAOYAO<small className="logo-sub">{t("brand.tagline", locale)}</small>
+          </Link>
         </div>
         <nav className="main-nav" aria-label="Main navigation">
           {navItems.map((item) => (
