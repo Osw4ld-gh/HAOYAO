@@ -7,6 +7,9 @@ import { t } from "@/lib/i18n";
 import { fetchPublic } from "@/lib/api/client";
 import { getSiteConfig } from "@/lib/api/site_config";
 import type { HomeData } from "@/lib/api/types";
+// hero 图作为 ES 资源 import（Next webpack asset module 处理，dev 实时可访问；
+// 规避 Next 15.5 dev 模式不扫描 public/ 新增文件的 bug）
+import heroBg from "@/public/haoyao_og_2x.png";
 
 // ============================================================================
 // HAOYAO 首页（app/[lang]/(front)/page.tsx，ISR 60s）
@@ -65,7 +68,7 @@ export default async function HomePage({ params }: HomePageProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundImage: "url(/haoyao_og_2x.png)",
+          backgroundImage: `url(${heroBg.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
