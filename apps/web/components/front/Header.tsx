@@ -70,14 +70,16 @@ export default function Header({ navItems, locale }: HeaderProps) {
         if (y > 260 && !prev) {
           if (process.env.NODE_ENV === "development") {
             const h = document.querySelector(".site-header")?.getBoundingClientRect().height;
-            console.log(`[Header scroll] compact: false → true at y=${y}, header height=${h}px`);
+            const cls = document.querySelector(".site-header")?.className;
+            console.log(`[Header scroll] compact: false → true at y=${y}, header height=${h}px, className="${cls}", isMobile=${isMobile}, innerWidth=${window.innerWidth}`);
           }
           return true;
         }
         if (y < 60 && prev) {
           if (process.env.NODE_ENV === "development") {
             const h = document.querySelector(".site-header")?.getBoundingClientRect().height;
-            console.log(`[Header scroll] compact: true → false at y=${y}, header height=${h}px`);
+            const cls = document.querySelector(".site-header")?.className;
+            console.log(`[Header scroll] compact: true → false at y=${y}, header height=${h}px, className="${cls}", isMobile=${isMobile}, innerWidth=${window.innerWidth}`);
           }
           return false;
         }
@@ -86,7 +88,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isMobile]);
 
   // 抽屉开启时锁定页面滚动
   useEffect(() => {
