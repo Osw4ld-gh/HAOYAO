@@ -65,7 +65,7 @@ export default async function HomePage({ params }: HomePageProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          backgroundImage: "url(/hero/haoyao_og_2x.png)",
+          backgroundImage: "url(/haoyao_og_2x.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
