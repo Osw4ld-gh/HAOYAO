@@ -416,14 +416,6 @@ button {
     border-bottom-color: transparent;
   }
 
-  /* ⚠️ DEBUG 临时规则（M9 排查）：compact 触发时给 header 加醒目边框，
-     让用户能立刻判断 CSS 是否真的加载——若滚到 >260 看到红色边框 = CSS 生效，问题在 JS/状态；
-     若没看到边框 = CSS 没加载，问题在 dev server hot-reload */
-  .site-header.compact {
-    outline: 3px solid red !important;
-    outline-offset: -3px;
-  }
-
   /* 隐藏 mobile markup */
   .site-header-grid,
   .mobile-menu-btn {
@@ -441,8 +433,17 @@ button {
     letter-spacing: 0.32em;
     text-indent: 0.32em;
   }
-  .site-header.compact.is-mobile-hidden {
-    transform: translateY(-100%);  /* 移动端整条 translateY 隐藏 */
+  /* 移动端 compact：CHANEL 风格——保留 ☰ + HAOYAO，height 缩 + 字号缩，不整条 translateY 滑出 */
+  .site-header.compact .site-header-grid {
+    height: 40px !important;     /* 64 → 40 */
+    transition: height 0.18s var(--ease-brand);
+  }
+  .site-header.compact .brand-logo {
+    font-size: 16px;             /* 20 → 16 */
+  }
+  /* 移动汉堡显示 */
+  .mobile-menu-btn {
+    display: flex !important;
   }
 }
 

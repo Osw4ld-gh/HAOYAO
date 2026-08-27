@@ -113,14 +113,13 @@ export default function Header({ navItems, locale }: HeaderProps) {
     window.location.href = languageHref(pathname, target);
   };
 
-  // className 组合：
+  // className 组合（CHANEL 风格：所有断点都 sticky + 内容缩，不整条 translateY 滑出）：
   //   - always: site-header
-  //   - compact: ".compact"（topbar + logo-row 收缩 + main-nav 收起 + HAOYAO 字号缩）
-  //   - compact + isMobile: ".is-mobile-hidden"（移动端整条 translateY 隐藏）
+  //   - compact: ".compact"（桌面：logo-row padding 缩 + HAOYAO 字号缩 + 副标题收 + main-nav 收；
+  //                          移动：site-header-grid height 缩 + HAOYAO 字号缩）
   const headerClass = [
     "site-header",
     compact ? "compact" : "",
-    compact && isMobile ? "is-mobile-hidden" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -129,9 +128,10 @@ export default function Header({ navItems, locale }: HeaderProps) {
 
   return (
     <>
-      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact
-          - 桌面（≥1024）：v2 三层（topbar + logo-row + main-nav）→ CHANEL 风格收
-          - 移动（≤1023）：site-header-grid（☰ + HAOYAO）→ 整条 translateY */}
+      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（CHANEL 风格：内容缩，不整条滑出）
+          - 桌面（≥1024）：v2 风格 logo-row（lang 左 + HAOYAO 居中 + 副标题下）+ main-nav 居中
+                          → logo-row padding 22-18→10-0 + HAOYAO 字号 28→20 + 副标题 max-height 0 + main-nav max-height 0
+          - 移动（≤1023）：site-header-grid（☰ + HAOYAO）→ height 64→40 + HAOYAO 字号缩 */}
       <header
         className={headerClass}
         style={{
@@ -142,20 +142,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
           backdropFilter: "blur(8px)",
           borderBottom: "1px solid var(--line)",
           transition:
-            "box-shadow 0.3s var(--ease-brand), transform var(--dur-nav) var(--ease-brand)",
-          /* ⚠️ DEBUG 强可视验证（M9 排查"compact 没生效"）：
-           * compact=true 时直接 inline 设 transform + 红色 box-shadow 内发光——
-           * 不依赖 CSS 类选择器，无论 CSS 加载与否都能直接看到状态翻转。
-           * 排查完成后会移除。 */
-          transform:
-            compact && isMobile
-              ? "translateY(-100%)"
-              : compact && !isMobile
-                ? "scaleY(0.5)"
-                : undefined,
-          boxShadow: compact
-            ? "0 0 0 4px red inset, 0 6px 18px -10px rgba(25,25,24,0.18)"
-            : "none",
+            "box-shadow 0.3s var(--ease-brand)",
+          boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
         {/* ============ 桌面（≥1024）logo-row + main-nav ============ */}
