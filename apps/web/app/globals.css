@@ -275,14 +275,12 @@ button {
  * - header 仍 sticky 显示（CHANEL 风格）
  * ========================================================================== */
 @media (min-width: 768px) {
-  /* ---------- logo-row：左 lang 切换 + HAOYAO 居中（absolute）+ 副标题下 ---------- */
+  /* ---------- logo-row：左 lang 切换（紧贴 viewport 左缘）+ HAOYAO 居中（absolute）+ 副标题下 ---------- */
   .logo-row {
     display: flex;
     align-items: center;
-    /* 容器 max-width + 左右 padding：lang 不贴 viewport 边缘、跟下方内容对齐到 1320px 容器 */
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 22px var(--container-pad) 18px;
+    /* 不设 max-width + horizontal padding：lang 紧贴 viewport 左缘，HAOYAO absolute 居中相对 padding-box */
+    padding: 22px 0 18px;
     position: relative;                /* HAOYAO absolute 居中需要 */
     transition: padding 0.18s var(--ease-brand);
   }
