@@ -62,12 +62,23 @@ export default function Header({ navItems, locale }: HeaderProps) {
 
   // 滚动收起（v2 原型 spec：CHANEL 风格，仅 logo-row 收缩 + main-nav 收 + HAOYAO 字号缩）
   // 滞回 260/60 避免小幅滚动来回抖
+  // dev 模式 debug：compact 状态变化时打 1 行日志（用户在 Chrome DevTools Console 直接看）
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setCompact((prev) => {
-        if (y > 260 && !prev) return true;
-        if (y < 60 && prev) return false;
+        if (y > 260 && !prev) {
+          if (process.env.NODE_ENV === "development") {
+            console.log(`[Header scroll] compact: false → true at y=${y}`);
+          }
+          return true;
+        }
+        if (y < 60 && prev) {
+          if (process.env.NODE_ENV === "development") {
+            console.log(`[Header scroll] compact: true → false at y=${y}`);
+          }
+          return false;
+        }
         return prev;
       });
     };

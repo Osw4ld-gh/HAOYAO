@@ -279,7 +279,10 @@ button {
   .logo-row {
     display: flex;
     align-items: center;
-    padding: 22px 0 18px;
+    /* 容器 max-width + 左右 padding：lang 不贴 viewport 边缘、跟下方内容对齐到 1320px 容器 */
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 22px var(--container-pad) 18px;
     position: relative;                /* HAOYAO absolute 居中需要 */
     transition: padding 0.18s var(--ease-brand);
   }
