@@ -106,6 +106,43 @@ button {
 }
 
 /* ============================================================================
+ * Hero section（首页大图区，对齐 v2 原型 + 等比缩放）
+ * - aspect-ratio 锁住原图比例（2400/1260 = 1.905），避免被 min-height 纵向/横向拉伸
+ * - ≥1024px：随容器宽度等比变化，1440px → hero ≈ 756px 高，与图片 1:1 还原
+ * - ≤1023px：撤掉 aspect-ratio 改用 min-height，因为宽高比继续按图片会让 hero 太矮；
+ *   移动端图中央会被 cover 模式裁切到只剩巨字（AOYA）——这是图片资源本身的属性，
+ *   真正解决需要 brand 方提供 4:5 / 1:1 portrait 版图（暂无）
+ * ========================================================================== */
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* 桌面：跟随原图 1.905 比例等比，padding 用 vw 联动字号看上去不会"突然空" */
+  aspect-ratio: 1.905;
+  padding: clamp(72px, 9vw, 120px) 24px clamp(60px, 7vw, 100px);
+  /* 极端宽屏：hero 不应超过视口高度（v2 原型规范 hero 不超 viewport 87%） */
+  max-height: 88vh;
+}
+
+@media (max-width: 1023px) {
+  .hero-section {
+    aspect-ratio: auto;        /* 撤掉横版比例——移动端不锁比例改由 min-height 撑高 */
+    min-height: 60vh;
+    padding: clamp(80px, 14vw, 120px) 20px clamp(60px, 10vw, 100px);
+  }
+}
+@media (max-width: 767px) {
+  .hero-section {
+    min-height: 70vh;          /* 矮屏 hero 占比更高，让图 cover 时仍可见上下边缘 */
+  }
+}
+
+/* ============================================================================
  * 滚动收起（CHANEL/v2 风格，所有断点通用——核心交互）
  * - .compact → 第二行 .desktop-nav-row 收起高度 + 透明 + 去下边线
  * - header 整体仍 sticky 可见，仅在 ≤1023px 叠 .is-mobile-hidden 才整条 translateY
@@ -132,6 +169,29 @@ button {
 }
 .site-header.compact .site-header-grid {
   height: 56px !important;
+}
+
+/* ============================================================================
+ * HAOYAO 品牌名——字号/字距由 className 控制（v2 原型规范：compact 态字号缩小）
+ * 正常态 26px / compact 态 18px / 字距同步缩放（让 logo-row padding 收缩时仍居中）
+ * 注：inline style 不写 fontSize/letterSpacing 是为了让 .compact 优先级生效
+ * ========================================================================== */
+.brand-logo {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;            /* 衬线字体右偏补偿，让视觉居中而非左重 */
+  color: var(--ink);
+  transition:
+    font-size var(--dur-nav) var(--ease-brand),
+    letter-spacing var(--dur-nav) var(--ease-brand),
+    text-indent var(--dur-nav) var(--ease-brand);
+}
+.site-header.compact .brand-logo {
+  font-size: 18px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
 }
 
 /* ≤1023px：≤1024 全部走汉堡（包括 1024 平板） */

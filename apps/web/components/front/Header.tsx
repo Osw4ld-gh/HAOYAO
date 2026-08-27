@@ -143,13 +143,12 @@ export default function Header({ navItems, locale }: HeaderProps) {
             {t("nav.switchTo", locale)}
           </Link>
 
-          {/* HAOYAO logo 居中（绝对定位 left:50% translateX(-50%)——精准居中，无视 flex 行为） */}
+          {/* HAOYAO logo 居中（绝对定位 left:50% translateX(-50%)——精准居中，无视 flex 行为；
+              字号/字距由 .brand-logo CSS 控制——compact 态字号缩到 18px（v2 原型规范）） */}
           <Link
             href={locale === "en" ? "/en" : "/"}
+            className="brand-logo"
             style={{
-              fontSize: 22,
-              fontWeight: 600,
-              letterSpacing: "0.28em",
               whiteSpace: "nowrap",
               position: "absolute",
               left: "50%",

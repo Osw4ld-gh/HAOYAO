@@ -62,19 +62,11 @@ export default async function HomePage({ params }: HomePageProps) {
           背景图 haoyao_og_2x.png（米白 + 抽象几何 + 山水波纹）；图已含品牌名，此处仅
           留 slogan 文字以兼顾 SEO 与无障碍（实际渲染被图覆盖） ============ */}
       <section
+        className="hero-section"
         style={{
-          position: "relative",
-          minHeight: "92vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
           backgroundImage: `url(${heroBg.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundColor: "var(--bg)",
           color: "var(--ink)",
-          textAlign: "center",
-          padding: "120px 24px 100px",
         }}
       >
         {/* 隐藏的可访问性副本（视觉被图覆盖，但屏幕阅读器与 SEO 仍读取） */}
@@ -83,7 +75,7 @@ export default async function HomePage({ params }: HomePageProps) {
           <p>{t("home.slogan", locale)}</p>
         </div>
         {/* slogan 视觉层（可叠加图中或下移至空白区） */}
-        <div style={{ position: "absolute", bottom: 80, left: "50%", transform: "translateX(-50%)", zIndex: 1 }}>
+        <div style={{ position: "absolute", bottom: "var(--hero-slogan-bottom, 80px)", left: "50%", transform: "translateX(-50%)", zIndex: 1 }}>
           <div
             style={{
               fontFamily: "var(--font-serif)",
