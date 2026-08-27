@@ -105,6 +105,35 @@ button {
   display: inline-flex !important;
 }
 
+/* ============================================================================
+ * 滚动收起（CHANEL/v2 风格，所有断点通用——核心交互）
+ * - .compact → 第二行 .desktop-nav-row 收起高度 + 透明 + 去下边线
+ * - header 整体仍 sticky 可见，仅在 ≤1023px 叠 .is-mobile-hidden 才整条 translateY
+ * 依据：原型 v2 参考实现 + UI 规范 §3.1
+ * ========================================================================== */
+.desktop-nav-row {
+  /* 默认就带 overflow:hidden，max-height:0 配合 0 padding 才能干净收起 */
+  overflow: hidden;
+  transition:
+    max-height var(--dur-nav) var(--ease-brand),
+    opacity var(--dur-nav) var(--ease-brand),
+    padding var(--dur-nav) var(--ease-brand),
+    border-color var(--dur-nav) var(--ease-brand);
+}
+.site-header-grid {
+  transition: height var(--dur-nav) var(--ease-brand);
+}
+.site-header.compact .desktop-nav-row {
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  opacity: 0 !important;
+  border-bottom-color: transparent !important;
+}
+.site-header.compact .site-header-grid {
+  height: 56px !important;
+}
+
 /* ≤1023px：≤1024 全部走汉堡（包括 1024 平板） */
 @media (max-width: 1023px) {
   .desktop-nav,
@@ -159,18 +188,7 @@ button {
     --grid-gap: 16px;
     --footer-grid: 1fr;
   }
-  /* 滚动收起：第二行导航 + topbar 收起；header 仍显示（CHANEL 风格） */
-  .site-header.compact .desktop-nav-row {
-    max-height: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    opacity: 0 !important;
-    border-bottom-color: transparent !important;
-  }
-  .site-header.compact .site-header-grid {
-    height: 56px !important;
-  }
-  /* 移动端：compact 时整条向上收起 */
+  /* 滚动收起 CSS 已在顶层定义（见上文）；此处仅保留移动端才生效的"整条 translateY 隐藏" */
   .site-header.compact.is-mobile-hidden {
     transform: translateY(-100%);
   }

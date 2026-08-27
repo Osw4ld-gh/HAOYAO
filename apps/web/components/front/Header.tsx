@@ -45,14 +45,24 @@ export default function Header({ navItems, locale }: HeaderProps) {
   const pathname = usePathname();
   const [compact, setCompact] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 当前是否 ≤1023px（matchMedia 比 resize + innerWidth 更准，SSR 不闪烁）
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   // 滚动收起（v2 原型 + CHANEL 风格）
-  // - 桌面端：滚动 ≥260 → compact 态，第二行导航收起，header 仍 sticky 显示
-  // - 移动端：compact 态叠加 is-mobile-hidden 类，整条 header 向上收起
+  // - 所有屏幕：scrollY > 260 → compact 态，第二行导航收起，header 仍 sticky 显示
+  // - 仅 ≤1023px：在 compact 之上再叠 .is-mobile-hidden，整条 header translateY 隐藏
+  // 滞回 260/60 避免小滚动来回抖
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      // 宽滞回（260/60）避免抖动
       setCompact((prev) => {
         if (y > 260 && !prev) return true;
         if (y < 60 && prev) return false;
@@ -75,11 +85,23 @@ export default function Header({ navItems, locale }: HeaderProps) {
     };
   }, [drawerOpen]);
 
+  // className 组合：
+  //   - always: site-header
+  //   - compact: ".compact"（第二行 nav 收起，桌面 + 移动通用）
+  //   - compact + isMobile: ".is-mobile-hidden"（整条 header translateY 隐藏）
+  const headerClass = [
+    "site-header",
+    compact ? "compact" : "",
+    compact && isMobile ? "is-mobile-hidden" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
-      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（桌面仅收起第二行 nav；移动端整条收起） */}
+      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（所有屏幕都收起第二行 nav；≤1023px 再叠 .is-mobile-hidden 整条收起） */}
       <header
-        className={`site-header ${compact ? "compact" : ""}`}
+        className={headerClass}
         style={{
           position: "sticky",
           top: 0,
