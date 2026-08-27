@@ -87,12 +87,29 @@ button {
   transform: scale(1.05);
 }
 
-/* Header 响应式：默认桌面端显示导航、隐藏汉堡 */
-.desktop-nav {
+/* Header 响应式：默认桌面端显示导航/第二行菜单、隐藏汉堡；
+   ≤1023px（平板+移动）全部改用汉堡菜单，桌面 nav 与第二行隐藏 */
+.desktop-nav,
+.desktop-nav-row {
   display: flex !important;
 }
 .mobile-menu-btn {
   display: none !important;
+}
+.header-lang {
+  display: inline-flex !important;
+}
+
+/* ≤1023px：≤1024 全部走汉堡（包括 1024 平板） */
+@media (max-width: 1023px) {
+  .desktop-nav,
+  .desktop-nav-row,
+  .header-lang {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
+  }
 }
 
 /* ============================================================================
@@ -115,7 +132,7 @@ button {
 }
 
 /* 平板（≤1024px）：产品 3 列 */
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   :root {
     --grid-products: repeat(3, 1fr);
   }
@@ -123,7 +140,7 @@ button {
 
 /* 移动（≤768px）：产品/明星 2 列，两栏单列，容器 padding 收紧 20px，
    页脚单列堆叠，桌面导航隐藏，触发移动端汉堡按钮 */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   :root {
     --container-pad: 20px;
     --grid-products: repeat(2, 1fr);
@@ -142,7 +159,7 @@ button {
 }
 
 /* 资讯列表项：移动端图文竖排 */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   .news-item {
     flex-direction: column;
     gap: 12px !important;

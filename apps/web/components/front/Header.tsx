@@ -97,21 +97,23 @@ export default function Header({ navItems, locale }: HeaderProps) {
             height: 72,
           }}
         >
-          {/* 第 1 列：语言切换（紧贴 HAOYAO 左侧；justify-self: end 推右靠 logo） */}
+          {/* col 1：桌面端——语言切换（紧贴 HAOYAO 左侧）；
+              ≤1024px——隐藏（语言切换进抽屉） */}
           <Link
             href={languageHref(pathname, locale)}
+            className="header-lang"
             style={{
               fontSize: 12,
               letterSpacing: "0.2em",
               color: "var(--ink-2)",
               whiteSpace: "nowrap",
-              justifySelf: "end",
+              justifySelf: "start",
             }}
           >
             {t("nav.switchTo", locale)}
           </Link>
 
-          {/* 第 2 列：HAOYAO logo（grid auto 列自动居中） */}
+          {/* col 2：HAOYAO logo 居中 */}
           <Link
             href={locale === "en" ? "/en" : "/"}
             style={{
@@ -125,13 +127,14 @@ export default function Header({ navItems, locale }: HeaderProps) {
             HAOYAO
           </Link>
 
-          {/* 第 3 列：桌面导航（菜单）/ 移动端（汉堡按钮；同一 grid 列覆盖） */}
+          {/* col 3：≥1024px——桌面端 nav（CHANEL 风格；justifySelf: end 靠右但与 logo 紧贴）
+              ≤1024px——由 globals hidden，nav 移到第二行/抽屉 */}
           <nav
             className="desktop-nav"
             style={{
               display: "flex",
               gap: 28,
-              justifySelf: "start",
+              justifySelf: "end",
               alignItems: "center",
             }}
           >
@@ -140,8 +143,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
                 key={item.id}
                 href={resolveHref(item, locale)}
                 style={{
-                  fontSize: 14,
-                  letterSpacing: "0.12em",
+                  fontSize: 13,
+                  letterSpacing: "0.14em",
                   color: "var(--ink)",
                   whiteSpace: "nowrap",
                   borderBottom: "2px solid transparent",
@@ -153,12 +156,12 @@ export default function Header({ navItems, locale }: HeaderProps) {
             ))}
           </nav>
 
-          {/* 移动端汉堡按钮（gridColumn 3 占据 nav 位置；桌面端 globals hidden） */}
+          {/* 移动端/平板端（≤1024px）汉堡按钮（gridColumn 3 占据 nav 位置） */}
           <button
             onClick={() => setDrawerOpen(true)}
             className="mobile-menu-btn"
             style={{
-              fontSize: 20,
+              fontSize: 22,
               padding: 8,
               gridColumn: 3,
               justifySelf: "start",
@@ -168,6 +171,38 @@ export default function Header({ navItems, locale }: HeaderProps) {
             ☰
           </button>
         </div>
+
+        {/* 桌面端第二行：导航（CHANEL 风格；位于 HAOYAO 下方居中；≤1024px 隐藏） */}
+        <nav
+          className="desktop-nav-row"
+          style={{
+            maxWidth: "var(--container-max)",
+            margin: "0 auto",
+            padding: "0 var(--container-pad) 14px",
+            display: "flex",
+            justifyContent: "center",
+            gap: 32,
+            borderBottom: "1px solid var(--line)",
+          }}
+        >
+          {navItems.map((item) => (
+            <Link
+              key={item.id}
+              href={resolveHref(item, locale)}
+              style={{
+                fontSize: 14,
+                letterSpacing: "0.16em",
+                color: "var(--ink)",
+                whiteSpace: "nowrap",
+                borderBottom: "2px solid transparent",
+                paddingBottom: 4,
+                transition: "color var(--dur-hover) var(--ease-brand)",
+              }}
+            >
+              {locale === "en" ? item.label.en || item.label.zh : item.label.zh}
+            </Link>
+          ))}
+        </nav>
       </header>
 
       {/* 移动端抽屉（平级列表，无手风琴——PRD V1.2 决策） */}
