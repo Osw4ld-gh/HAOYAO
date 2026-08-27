@@ -211,7 +211,7 @@ INSERT INTO navigation (id, parent_id, label_json, link_type, link_value, sort, 
     (2, NULL, '{"zh":"香水","en":"Fragrance"}',   'category', 'fragrance',            2, 1),
     (3, NULL, '{"zh":"彩妆","en":"Makeup"}',      'category', 'makeup',               3, 1),
     (4, NULL, '{"zh":"护肤品","en":"Skincare"}',  'category', 'skincare',             4, 1),
-    (5, NULL, '{"zh":"新闻资讯","en":"News"}',    'news',     'news/company',         5, 1),
+    (5, NULL, '{"zh":"新闻资讯","en":"News"}',    'news',     '',                    5, 1),
     (6, NULL, '{"zh":"关于HAOYAO","en":"About"}', 'page',     'about/story',          6, 1);
 
 INSERT INTO navigation (id, parent_id, label_json, link_type, link_value, sort, enabled) VALUES

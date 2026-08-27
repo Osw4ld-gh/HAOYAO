@@ -30,6 +30,8 @@ function resolveHref(node: NavNode, locale: "zh" | "en"): string {
   const prefix = locale === "en" ? "/en" : "";
   if (node.link_type === "url") return node.link_value; // 外部 URL 不加前缀
   if (node.link_type === "home") return prefix || "/";
+  // news 类型统一跳列表页 /news（不依赖 link_value，避免 seed 配置不当导致 404）
+  if (node.link_type === "news") return `${prefix}/news`;
   return `${prefix}/${node.link_value}`;
 }
 
@@ -124,22 +126,21 @@ export default function Header({ navItems, locale }: HeaderProps) {
           boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
-        {/* ============ 桌面（≥1024）v2 三层：topbar + logo-row + main-nav ============ */}
-        {/* topbar：左 lang 切换（紧贴最左，space-between 时左边顶到左缘），
-            右空（v2 prototype 是"联系我们/email"——PRD 不做） */}
-        <div className="topbar">
-          <div className="topbar-lang" aria-label="Language">
+        {/* ============ 桌面（≥1024）logo-row + main-nav ============ */}
+        {/* logo-row：左 lang 切换（紧贴最左）+ HAOYAO 居中（absolute）+ 副标题下垂直排列
+            用户明确要求：lang 跟 HAOYAO 同一行（不放 topbar 独立行） + 无 divider */}
+        <div className="logo-row">
+          <div className="logo-row-lang" aria-label="Language">
             <button
-              className={`topbar-lang-btn ${locale === "zh" ? "is-active" : ""}`}
+              className={`logo-row-lang-btn ${locale === "zh" ? "is-active" : ""}`}
               onClick={() => switchLocale("zh")}
               data-lang="zh"
               type="button"
             >
               中文
             </button>
-            <span className="topbar-lang-div" aria-hidden="true" />
             <button
-              className={`topbar-lang-btn ${locale === "en" ? "is-active" : ""}`}
+              className={`logo-row-lang-btn ${locale === "en" ? "is-active" : ""}`}
               onClick={() => switchLocale("en")}
               data-lang="en"
               type="button"
@@ -147,10 +148,6 @@ export default function Header({ navItems, locale }: HeaderProps) {
               EN
             </button>
           </div>
-        </div>
-
-        {/* logo-row：HAOYAO（block, text-align:center）上 + 副标题（block small）下 垂直排列 */}
-        <div className="logo-row">
           <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
             HAOYAO<small className="logo-sub">{t("brand.tagline", locale)}</small>
           </Link>
