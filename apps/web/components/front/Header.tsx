@@ -86,6 +86,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
         }}
       >
         <div
+          className="site-header-grid"
           style={{
             maxWidth: "var(--container-max)",
             margin: "0 auto",

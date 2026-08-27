@@ -113,8 +113,9 @@ button {
     justify-self: start;
     margin-left: -8px; /* 抵消 button padding，紧贴最左 */
   }
-  /* ≤1023px 容器左 padding 归零（HAOYAO 仍居中，☰ 紧贴左边） */
-  .front-shell > div[style*="grid-template-columns"] {
+  /* ≤1023px Header 容器：grid 改 auto 1fr auto + padding 归零——☰ 紧贴左、HAOYAO 居中 */
+  .site-header-grid {
+    grid-template-columns: auto 1fr auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
@@ -171,8 +172,9 @@ button {
     justify-self: start;
     margin-left: -8px; /* 抵消 button padding，紧贴最左 */
   }
-  /* ≤1023px 容器左 padding 归零（HAOYAO 仍居中，☰ 紧贴左边） */
-  .front-shell > div[style*="grid-template-columns"] {
+  /* ≤1023px Header 容器：grid 改 auto 1fr auto + padding 归零——☰ 紧贴左、HAOYAO 居中 */
+  .site-header-grid {
+    grid-template-columns: auto 1fr auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
