@@ -51,11 +51,16 @@ export default function Header({ navItems, locale }: HeaderProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 当前是否 ≤1023px（matchMedia 比 resize + innerWidth 更准，SSR 不闪烁）
+  // 当前是否 ≤1023px
+  // 初始值 false（SSR 一致 + 避免 hydration mismatch）；mount 后立即根据 matchMedia 同步
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1023px)");
-    const update = () => setIsMobile(mq.matches);
-    update();
+    const update = () => {
+      const v = mq.matches;
+      console.log(`[Header mq] isMobile=${v}, innerWidth=${window.innerWidth}`);
+      setIsMobile(v);
+    };
+    update();   // mount 立即同步（不再等 scroll 事件）
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
