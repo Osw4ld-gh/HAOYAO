@@ -119,13 +119,27 @@ button {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   width: 100%;
   aspect-ratio: 1.905;
   max-height: 1000px;
   background-color: var(--bg);    /* fallback：图片透明区与页面 bg 同色不留缝 */
+  overflow: hidden;              /* picture/img 绝对定位不能超出 */
+}
+
+/* hero 图层（picture+img 模式：mobile 4:5 / desktop 16:8.4 通过 <source media> 切换） */
+.hero-picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 @media (max-width: 1023px) {
@@ -168,6 +182,78 @@ button {
 }
 .site-header.compact .site-header-grid {
   height: 56px !important;
+}
+
+/* ============================================================================
+ * 品牌传承 entry-card（v2 原型 §5.5：The Maison 2 卡片）
+ * 2 个并排卡片，16:9 aspect-ratio，深色背景 + overlay 文字，hover scale
+ * 占位背景：inline radial-gradient（等 brand 方补图后换 url(...)）
+ * ========================================================================== */
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+}
+@media (max-width: 768px) {
+  .entry-grid {
+    grid-template-columns: 1fr;       /* ≤768 移动端单列堆叠 */
+    gap: 24px;
+  }
+}
+.entry-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: block;
+  color: #fff;
+  text-decoration: none;
+}
+.entry-card-bg {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.7s var(--ease-brand);
+  background-size: cover;
+  background-position: center;
+}
+/* 卡片 1：品牌故事——暖光向墨色过渡（v2 原型 data-art="story" 占位） */
+.entry-card-bg--story {
+  background:
+    radial-gradient(circle at 70% 30%, #4a4136 0%, #211f1b 65%),
+    linear-gradient(135deg, #34302a, #211f1b);
+}
+/* 卡片 2：发展历程——冷调向墨色过渡（v2 原型 data-art="history" 占位） */
+.entry-card-bg--history {
+  background:
+    radial-gradient(circle at 30% 70%, #3a342c 0%, #1a1815 65%),
+    linear-gradient(225deg, #2c2823, #1a1815);
+}
+.entry-card:hover .entry-card-bg {
+  transform: scale(1.05);
+}
+.entry-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  background: linear-gradient(transparent 40%, rgba(10, 9, 8, 0.66));
+}
+.entry-card-name {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+.entry-card-sub {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 8px;
+}
+@media (max-width: 768px) {
+  .entry-card-name { font-size: 20px; }
+  .entry-card-overlay { padding: 22px; }
 }
 
 /* ============================================================================
