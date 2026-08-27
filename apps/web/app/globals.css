@@ -346,21 +346,8 @@ button {
       opacity 0.18s var(--ease-brand),
       margin 0.18s var(--ease-brand);
   }
-  /* compact 态：logo-row padding 收缩 + HAOYAO 字号缩 + 副标题 max-height 0 */
-  .site-header.compact .logo-row {
-    padding: 10px 0;
-  }
-  .site-header.compact .logo {
-    font-size: 20px;
-    letter-spacing: 0.4em;
-    text-indent: 0.4em;
-  }
-  .site-header.compact .logo-sub {
-    max-height: 0;
-    opacity: 0;
-    margin: 0;
-  }
-
+  /* compact 态（CHANEL 风格）：只让 .main-nav 收起——HAOYAO 字号 / logo-row padding / 副标题 都**不动**
+     HAOYAO 始终保持原状不变，右侧 icons 也不动（CHANEL 参考视频确认） */
   /* ---------- main-nav：6 菜单居中 ---------- */
   .main-nav {
     display: flex;
@@ -407,7 +394,7 @@ button {
     color: var(--gold-deep);
   }
 
-  /* compact 态：v2 spec（main-nav 收起到 max-height:0） */
+  /* compact 态（CHANEL 风格）：只让 .main-nav 收起——HAOYAO / logo-row / 副标题都不动 */
   .site-header.compact .main-nav {
     max-height: 0;
     padding-top: 0;
@@ -433,14 +420,7 @@ button {
     letter-spacing: 0.32em;
     text-indent: 0.32em;
   }
-  /* 移动端 compact：CHANEL 风格——保留 ☰ + HAOYAO，height 缩 + 字号缩，不整条 translateY 滑出 */
-  .site-header.compact .site-header-grid {
-    height: 40px !important;     /* 64 → 40 */
-    transition: height 0.18s var(--ease-brand);
-  }
-  .site-header.compact .brand-logo {
-    font-size: 16px;             /* 20 → 16 */
-  }
+  /* 移动端 compact（CHANEL 风格）：site-header-grid 没有任何 nav 行可收——保留默认状态不变 */
   /* 移动汉堡显示 */
   .mobile-menu-btn {
     display: flex !important;
