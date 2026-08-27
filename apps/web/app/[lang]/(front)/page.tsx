@@ -55,28 +55,44 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div>
-      {/* ============ Hero：品牌名 + 宣传语（PRD §3.2 大标题规则） ============ */}
+      {/* ============ Hero：HAOYAO 品牌名 + 宣传语（M9 视觉对齐高保真原型 v2）
+          背景图 haoyao_og_2x.png（米白 + 抽象几何 + 山水波纹）；图已含品牌名，此处仅
+          留 slogan 文字以兼顾 SEO 与无障碍（实际渲染被图覆盖） ============ */}
       <section
         style={{
-          background: "linear-gradient(160deg, var(--hero-1) 0%, var(--hero-2) 100%)",
-          color: "#fff",
+          position: "relative",
+          minHeight: "92vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundImage: "url(/hero/haoyao_og_2x.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          color: "var(--ink)",
           textAlign: "center",
           padding: "120px 24px 100px",
         }}
       >
-        <div style={{ fontSize: "var(--fs-hero)", letterSpacing: "0.12em", fontWeight: 300 }}>
-          HAOYAO
+        {/* 隐藏的可访问性副本（视觉被图覆盖，但屏幕阅读器与 SEO 仍读取） */}
+        <div style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
+          <h1>HAOYAO 皓遥</h1>
+          <p>{t("home.slogan", locale)}</p>
         </div>
-        <div
-          style={{
-            marginTop: 24,
-            fontSize: "var(--fs-h2)",
-            fontWeight: 300,
-            letterSpacing: "0.3em",
-            color: "var(--gold-soft)",
-          }}
-        >
-          {t("home.slogan", locale)}
+        {/* slogan 视觉层（可叠加图中或下移至空白区） */}
+        <div style={{ position: "absolute", bottom: 80, left: "50%", transform: "translateX(-50%)", zIndex: 1 }}>
+          <div
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(18px, 2vw, 26px)",
+              fontWeight: 400,
+              letterSpacing: "0.4em",
+              color: "var(--ink-2)",
+              opacity: 0,
+            }}
+          >
+            {t("home.slogan", locale)}
+          </div>
         </div>
       </section>
 
