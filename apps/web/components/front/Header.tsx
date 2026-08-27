@@ -130,34 +130,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
             HAOYAO
           </Link>
 
-          {/* col 3：≥1024px——桌面端 nav（CHANEL 风格；justifySelf: end 靠右但与 logo 紧贴）
-              ≤1024px——由 globals hidden，nav 移到第二行/抽屉 */}
-          <nav
-            className="desktop-nav"
-            style={{
-              display: "flex",
-              gap: 28,
-              justifySelf: "end",
-              alignItems: "center",
-            }}
-          >
-            {navItems.map((item) => (
-              <Link
-                key={item.id}
-                href={resolveHref(item, locale)}
-                style={{
-                  fontSize: 13,
-                  letterSpacing: "0.14em",
-                  color: "var(--ink)",
-                  whiteSpace: "nowrap",
-                  borderBottom: "2px solid transparent",
-                  transition: "color var(--dur-hover) var(--ease-brand)",
-                }}
-              >
-                {locale === "en" ? item.label.en || item.label.zh : item.label.zh}
-              </Link>
-            ))}
-          </nav>
+          {/* col 3 占位（桌面 nav 已移至第二行 .desktop-nav-row，避免重复渲染） */}
 
           {/* 移动端/平板端（≤1024px）汉堡按钮（order:-1 排到 HAOYAO 之前——紧贴最左） */}
           <button

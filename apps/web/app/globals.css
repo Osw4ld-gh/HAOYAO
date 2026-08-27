@@ -156,10 +156,7 @@ button {
     --grid-gap: 16px;
     --footer-grid: 1fr;
   }
-  /* 桌面导航隐藏 / 移动汉堡显示（M7 响应式：Header 断点切换） */
-  .desktop-nav {
-    display: none !important;
-  }
+  /* 移动汉堡显示（桌面 nav 已在第二行 .desktop-nav-row 控制） */
   .mobile-menu-btn {
     display: flex !important;
   }
