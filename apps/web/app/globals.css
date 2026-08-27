@@ -107,11 +107,11 @@ button {
 
 /* ============================================================================
  * Hero section（首页大图区，对齐 v2 原型 + 等比缩放）
- * - aspect-ratio 锁住原图比例（2400/1260 = 1.905），避免被 min-height 纵向/横向拉伸
- * - ≥1024px：随容器宽度等比变化，1440px → hero ≈ 756px 高，与图片 1:1 还原
- * - ≤1023px：撤掉 aspect-ratio 改用 min-height，因为宽高比继续按图片会让 hero 太矮；
- *   移动端图中央会被 cover 模式裁切到只剩巨字（AOYA）——这是图片资源本身的属性，
- *   真正解决需要 brand 方提供 4:5 / 1:1 portrait 版图（暂无）
+ * - aspect-ratio 锁原图比例（2400/1260 = 1.905），避免被 max-height 截断后盒子比例走样
+ * - 1440 桌面：width 1440 / 1.905 = 756px 高，与图片 1:1 还原（左右不留白）
+ * - 极端宽屏：max-height: 1000px cap（避免 4K 下 hero 高度失控）
+ * - 移动端 ≤1023 撤 aspect-ratio 改用 min-height，原因：横图在窄屏 cover 必然裁中央——
+ *   真正解决需 brand 方提供 4:5 portrait 版图（本轮不依赖）
  * ========================================================================== */
 .hero-section {
   position: relative;
@@ -122,23 +122,22 @@ button {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* 桌面：跟随原图 1.905 比例等比，padding 用 vw 联动字号看上去不会"突然空" */
+  width: 100%;
   aspect-ratio: 1.905;
-  padding: clamp(72px, 9vw, 120px) 24px clamp(60px, 7vw, 100px);
-  /* 极端宽屏：hero 不应超过视口高度（v2 原型规范 hero 不超 viewport 87%） */
-  max-height: 88vh;
+  max-height: 1000px;
+  background-color: var(--bg);    /* fallback：图片透明区与页面 bg 同色不留缝 */
 }
 
 @media (max-width: 1023px) {
   .hero-section {
-    aspect-ratio: auto;        /* 撤掉横版比例——移动端不锁比例改由 min-height 撑高 */
+    aspect-ratio: auto;          /* 撤掉横版比例——移动端改由 min-height 撑高 */
     min-height: 60vh;
     padding: clamp(80px, 14vw, 120px) 20px clamp(60px, 10vw, 100px);
   }
 }
 @media (max-width: 767px) {
   .hero-section {
-    min-height: 70vh;          /* 矮屏 hero 占比更高，让图 cover 时仍可见上下边缘 */
+    min-height: 70vh;            /* 矮屏 hero 占比更高，让图 cover 时上下边缘仍可见 */
   }
 }
 
