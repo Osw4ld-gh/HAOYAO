@@ -111,9 +111,6 @@ button {
   }
   .mobile-menu-btn {
     display: flex !important;
-    grid-column: 1;
-    justify-self: start;
-    margin-left: -8px; /* 抵消 button padding，紧贴最左 */
   }
   /* ≤1023px Header 容器：padding 归零（grid 默认 auto 1fr auto 已由 globals base 类定义） */
   .site-header-grid {
@@ -165,9 +162,6 @@ button {
   }
   .mobile-menu-btn {
     display: flex !important;
-    grid-column: 1;
-    justify-self: start;
-    margin-left: -8px; /* 抵消 button padding，紧贴最左 */
   }
 }
 

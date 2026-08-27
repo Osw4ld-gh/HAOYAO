@@ -91,10 +91,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
             maxWidth: "var(--container-max)",
             margin: "0 auto",
             padding: "0 var(--container-pad)",
-            display: "grid",
-            gridTemplateColumns: "auto 1fr auto",
+            display: "flex",
             alignItems: "center",
-            gap: 24,
+            gap: 16,
             height: 72,
           }}
         >
@@ -114,7 +113,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
             {t("nav.switchTo", locale)}
           </Link>
 
-          {/* col 2：HAOYAO logo 居中 */}
+          {/* HAOYAO logo 居中（flex auto margin） */}
           <Link
             href={locale === "en" ? "/en" : "/"}
             style={{
@@ -122,7 +121,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
               fontWeight: 600,
               letterSpacing: "0.28em",
               whiteSpace: "nowrap",
-              justifySelf: "center",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             HAOYAO
@@ -157,15 +157,14 @@ export default function Header({ navItems, locale }: HeaderProps) {
             ))}
           </nav>
 
-          {/* 移动端/平板端（≤1024px）汉堡按钮（gridColumn 3 占据 nav 位置） */}
+          {/* 移动端/平板端（≤1024px）汉堡按钮（order:-1 排到 HAOYAO 之前——紧贴最左） */}
           <button
             onClick={() => setDrawerOpen(true)}
             className="mobile-menu-btn"
             style={{
               fontSize: 22,
               padding: 8,
-              gridColumn: 3,
-              justifySelf: "start",
+              order: -1,
             }}
             aria-label={t("nav.openMenu", locale)}
           >
