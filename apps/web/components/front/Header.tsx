@@ -90,32 +90,51 @@ export default function Header({ navItems, locale }: HeaderProps) {
             maxWidth: "var(--container-max)",
             margin: "0 auto",
             padding: "0 var(--container-pad)",
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
             alignItems: "center",
-            gap: 40,
+            gap: 24,
             height: 72,
           }}
         >
-          {/* 品牌 + 移动端汉堡（包成一组：移动端 logo-汉堡靠左贴紧，桌面端汉堡隐藏） */}
-          <div className="header-left" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <Link
-              href={locale === "en" ? "/en" : "/"}
-              style={{ fontSize: 22, fontWeight: 600, letterSpacing: "0.28em", whiteSpace: "nowrap" }}
-            >
-              HAOYAO
-            </Link>
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="mobile-menu-btn"
-              style={{ fontSize: 20, padding: 8 }}
-              aria-label={t("nav.openMenu", locale)}
-            >
-              ☰
-            </button>
-          </div>
+          {/* 第 1 列：语言切换（紧贴 HAOYAO 左侧；justify-self: end 推右靠 logo） */}
+          <Link
+            href={languageHref(pathname, locale)}
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.2em",
+              color: "var(--ink-2)",
+              whiteSpace: "nowrap",
+              justifySelf: "end",
+            }}
+          >
+            {t("nav.switchTo", locale)}
+          </Link>
 
-          {/* 主导航（桌面端；点击直达二级由各页面 Tab 承接） */}
-          <nav className="desktop-nav" style={{ flex: 1, display: "flex", gap: 36, justifyContent: "center" }}>
+          {/* 第 2 列：HAOYAO logo（grid auto 列自动居中） */}
+          <Link
+            href={locale === "en" ? "/en" : "/"}
+            style={{
+              fontSize: 22,
+              fontWeight: 600,
+              letterSpacing: "0.28em",
+              whiteSpace: "nowrap",
+              justifySelf: "center",
+            }}
+          >
+            HAOYAO
+          </Link>
+
+          {/* 第 3 列：桌面导航（菜单）/ 移动端（汉堡按钮；同一 grid 列覆盖） */}
+          <nav
+            className="desktop-nav"
+            style={{
+              display: "flex",
+              gap: 28,
+              justifySelf: "start",
+              alignItems: "center",
+            }}
+          >
             {navItems.map((item) => (
               <Link
                 key={item.id}
@@ -134,13 +153,20 @@ export default function Header({ navItems, locale }: HeaderProps) {
             ))}
           </nav>
 
-          {/* 语言切换（保留等价路由） */}
-          <Link
-            href={languageHref(pathname, locale)}
-            style={{ fontSize: 12, letterSpacing: "0.2em", color: "var(--ink-2)", whiteSpace: "nowrap" }}
+          {/* 移动端汉堡按钮（gridColumn 3 占据 nav 位置；桌面端 globals hidden） */}
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="mobile-menu-btn"
+            style={{
+              fontSize: 20,
+              padding: 8,
+              gridColumn: 3,
+              justifySelf: "start",
+            }}
+            aria-label={t("nav.openMenu", locale)}
           >
-            {t("nav.switchTo", locale)}
-          </Link>
+            ☰
+          </button>
         </div>
       </header>
 
