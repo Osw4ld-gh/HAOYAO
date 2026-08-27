@@ -265,14 +265,6 @@ export default function Header({ navItems, locale }: HeaderProps) {
                 </Link>
               ))}
             </nav>
-            {/* 语言切换（移动端，保留等价路由） */}
-            <Link
-              href={languageHref(pathname, locale)}
-              onClick={() => setDrawerOpen(false)}
-              style={{ display: "block", paddingTop: 20, fontSize: 13, letterSpacing: "0.2em", color: "var(--ink-2)" }}
-            >
-              {t("nav.switchTo", locale)}
-            </Link>
           </div>
         </div>
       )}
