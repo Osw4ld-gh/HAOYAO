@@ -96,13 +96,23 @@ export default function Header({ navItems, locale }: HeaderProps) {
             height: 72,
           }}
         >
-          {/* 品牌 */}
+          {/* 品牌 + 移动端汉堡（紧邻一组，移动端 logo-汉堡-语言三段） */}
           <Link
             href={locale === "en" ? "/en" : "/"}
             style={{ fontSize: 22, fontWeight: 600, letterSpacing: "0.28em", whiteSpace: "nowrap" }}
           >
             HAOYAO
           </Link>
+
+          {/* 移动端汉堡（紧贴 logo 右侧；桌面端由 globals 隐藏） */}
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="mobile-menu-btn"
+            style={{ fontSize: 20, padding: 8, marginLeft: 4 }}
+            aria-label={t("nav.openMenu", locale)}
+          >
+            ☰
+          </button>
 
           {/* 主导航（桌面端；点击直达二级由各页面 Tab 承接） */}
           <nav className="desktop-nav" style={{ flex: 1, display: "flex", gap: 36, justifyContent: "center" }}>
@@ -123,16 +133,6 @@ export default function Header({ navItems, locale }: HeaderProps) {
               </Link>
             ))}
           </nav>
-
-          {/* 移动端汉堡 */}
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="mobile-menu-btn"
-            style={{ fontSize: 20, padding: 8 }}
-            aria-label={t("nav.openMenu", locale)}
-          >
-            ☰
-          </button>
 
           {/* 语言切换（保留等价路由） */}
           <Link
