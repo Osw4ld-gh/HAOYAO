@@ -138,7 +138,19 @@ export default function Header({ navItems, locale }: HeaderProps) {
           borderBottom: "1px solid var(--line)",
           transition:
             "box-shadow 0.3s var(--ease-brand), transform var(--dur-nav) var(--ease-brand)",
-          boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
+          /* ⚠️ DEBUG 强可视验证（M9 排查"compact 没生效"）：
+           * compact=true 时直接 inline 设 transform + 红色 box-shadow 内发光——
+           * 不依赖 CSS 类选择器，无论 CSS 加载与否都能直接看到状态翻转。
+           * 排查完成后会移除。 */
+          transform:
+            compact && isMobile
+              ? "translateY(-100%)"
+              : compact && !isMobile
+                ? "scaleY(0.5)"
+                : undefined,
+          boxShadow: compact
+            ? "0 0 0 4px red inset, 0 6px 18px -10px rgba(25,25,24,0.18)"
+            : "none",
         }}
       >
         {/* ============ 桌面（≥1024）logo-row + main-nav ============ */}
