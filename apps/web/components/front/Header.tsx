@@ -96,23 +96,23 @@ export default function Header({ navItems, locale }: HeaderProps) {
             height: 72,
           }}
         >
-          {/* 品牌 + 移动端汉堡（紧邻一组，移动端 logo-汉堡-语言三段） */}
-          <Link
-            href={locale === "en" ? "/en" : "/"}
-            style={{ fontSize: 22, fontWeight: 600, letterSpacing: "0.28em", whiteSpace: "nowrap" }}
-          >
-            HAOYAO
-          </Link>
-
-          {/* 移动端汉堡（紧贴 logo 右侧；桌面端由 globals 隐藏） */}
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="mobile-menu-btn"
-            style={{ fontSize: 20, padding: 8, marginLeft: 4 }}
-            aria-label={t("nav.openMenu", locale)}
-          >
-            ☰
-          </button>
+          {/* 品牌 + 移动端汉堡（包成一组：移动端 logo-汉堡靠左贴紧，桌面端汉堡隐藏） */}
+          <div className="header-left" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <Link
+              href={locale === "en" ? "/en" : "/"}
+              style={{ fontSize: 22, fontWeight: 600, letterSpacing: "0.28em", whiteSpace: "nowrap" }}
+            >
+              HAOYAO
+            </Link>
+            <button
+              onClick={() => setDrawerOpen(true)}
+              className="mobile-menu-btn"
+              style={{ fontSize: 20, padding: 8 }}
+              aria-label={t("nav.openMenu", locale)}
+            >
+              ☰
+            </button>
+          </div>
 
           {/* 主导航（桌面端；点击直达二级由各页面 Tab 承接） */}
           <nav className="desktop-nav" style={{ flex: 1, display: "flex", gap: 36, justifyContent: "center" }}>
