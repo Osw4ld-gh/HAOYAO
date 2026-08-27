@@ -230,9 +230,21 @@ export default function Header({ navItems, locale }: HeaderProps) {
               overflowY: "auto",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", marginBottom: 24, gap: 16 }}>
               <span style={{ fontSize: 18, letterSpacing: "0.28em", fontWeight: 600 }}>HAOYAO</span>
-              <button onClick={() => setDrawerOpen(false)} style={{ fontSize: 22 }} aria-label={t("nav.closeMenu", locale)}>
+              {/* 语言切换紧贴 HAOYAO 右侧（HAOYAO 同排） */}
+              <Link
+                href={languageHref(pathname, locale)}
+                onClick={() => setDrawerOpen(false)}
+                style={{ fontSize: 12, letterSpacing: "0.2em", color: "var(--ink-2)" }}
+              >
+                {t("nav.switchTo", locale)}
+              </Link>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                style={{ fontSize: 22, marginLeft: "auto" }}
+                aria-label={t("nav.closeMenu", locale)}
+              >
                 ×
               </button>
             </div>

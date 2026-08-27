@@ -109,6 +109,12 @@ button {
   }
   .mobile-menu-btn {
     display: flex !important;
+    grid-column: 1;
+    justify-self: start;
+  }
+  /* ≤1023px 容器三列改为 auto 1fr auto：汉堡窄列在最左，logo 居中，右列空 */
+  .front-shell > div[style*="grid-template-columns"] {
+    grid-template-columns: auto 1fr auto !important;
   }
 }
 
@@ -155,6 +161,12 @@ button {
   }
   .mobile-menu-btn {
     display: flex !important;
+    grid-column: 1;
+    justify-self: start;
+  }
+  /* ≤1023px 容器三列改为 auto 1fr auto：汉堡窄列在最左，logo 居中，右列空 */
+  .front-shell > div[style*="grid-template-columns"] {
+    grid-template-columns: auto 1fr auto !important;
   }
 }
 
