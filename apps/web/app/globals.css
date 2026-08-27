@@ -102,6 +102,8 @@ button {
   --grid-2col: 1fr 1fr;
   /* 网格间距（随断点收紧） */
   --grid-gap: 24px;
+  /* 页脚四列（桌面） */
+  --footer-grid: 2fr 1fr 1fr 1fr;
 }
 
 /* 平板（≤1024px）：产品 3 列 */
@@ -111,7 +113,8 @@ button {
   }
 }
 
-/* 移动（≤768px）：产品/明星 2 列，两栏单列，容器 padding 收紧 20px */
+/* 移动（≤768px）：产品/明星 2 列，两栏单列，容器 padding 收紧 20px，
+   页脚单列堆叠，桌面导航隐藏，触发移动端汉堡按钮 */
 @media (max-width: 768px) {
   :root {
     --container-pad: 20px;
@@ -119,6 +122,14 @@ button {
     --grid-featured: repeat(2, 1fr);
     --grid-2col: 1fr;
     --grid-gap: 16px;
+    --footer-grid: 1fr;
+  }
+  /* 桌面导航隐藏 / 移动汉堡显示（M7 响应式：Header 断点切换） */
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: flex !important;
   }
 }
 

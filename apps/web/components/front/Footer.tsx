@@ -39,7 +39,7 @@ export default function Footer({ locale, contact }: FooterProps) {
           margin: "0 auto",
           padding: "64px var(--container-pad) 40px",
           display: "grid",
-          gridTemplateColumns: "2fr 1fr 1fr 1fr",
+          gridTemplateColumns: "var(--footer-grid)",
           gap: 48,
         }}
       >

@@ -127,7 +127,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
           {/* 移动端汉堡 */}
           <button
             onClick={() => setDrawerOpen(true)}
-            style={{ display: "none", fontSize: 20, padding: 8 }}
+            className="mobile-menu-btn"
+            style={{ fontSize: 20, padding: 8 }}
             aria-label={t("nav.openMenu", locale)}
           >
             ☰
