@@ -122,10 +122,6 @@ button {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  /* ≤1023px 容器三列改为 auto 1fr auto：汉堡窄列在最左，logo 居中，右列空 */
-  .front-shell > div[style*="grid-template-columns"] {
-    grid-template-columns: auto 1fr auto !important;
-  }
 }
 
 /* ============================================================================
@@ -174,11 +170,6 @@ button {
     grid-column: 1;
     justify-self: start;
     margin-left: -8px; /* 抵消 button padding，紧贴最左 */
-  }
-  /* ≤1023px Header 容器：padding 归零（grid 默认 auto 1fr auto 已由 globals base 类定义） */
-  .site-header-grid {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
   }
 }
 
