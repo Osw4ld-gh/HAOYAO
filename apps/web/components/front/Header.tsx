@@ -3,10 +3,12 @@
 // ============================================================================
 // HAOYAO 前台主导航 Header（components/front/Header.tsx）
 // 功能：
-//   - 品牌 + 主导航（点击直达，无 hover 下拉——PRD V1.2 决策）+ 语言切换
-//   - 滚动收起：scrollY > 260 收起 / < 60 恢复，180ms 过渡（原型 v2 宽滞回参数）
-//   - 移动端：汉堡按钮 → 侧滑抽屉（平级列表，锁定滚动）
-// 依据：UI 规范 §3.1 导航 / 原型 v2；导航数据由 [lang]/layout（服务端）传入。
+//   - v2 prototype 三层结构（topbar 去除，保留 logo-row + main-nav）
+//   - 桌面（≥1024）：logo-row（HAOYAO 28px + 副标题 11px）+ main-nav（6 菜单 14px）
+//   - 移动（≤1023）：site-header-grid（☰ + HAOYAO 居中）+ 汉堡抽屉
+//   - 滚动收起：scrollY > 260 触发 .compact（CHANEL 风格：仅 logo-row + main-nav 收缩，
+//     HAOYAO 字号 28→20、副标题隐藏、main-nav max-height 0；header 仍 sticky 显示）
+// 依据：UI 规范 §3.1 / 原型 v2；导航数据由 [lang]/layout（服务端）传入。
 // ============================================================================
 
 import Link from "next/link";
@@ -56,10 +58,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // 滚动收起（v2 原型 + CHANEL 风格）
-  // - 所有屏幕：scrollY > 260 → compact 态，第二行导航收起，header 仍 sticky 显示
-  // - 仅 ≤1023px：在 compact 之上再叠 .is-mobile-hidden，整条 header translateY 隐藏
-  // 滞回 260/60 避免小滚动来回抖
+  // 滚动收起（v2 原型 spec：CHANEL 风格，仅 logo-row 收缩 + main-nav 收 + HAOYAO 字号缩）
+  // 滞回 260/60 避免小幅滚动来回抖
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -87,8 +87,8 @@ export default function Header({ navItems, locale }: HeaderProps) {
 
   // className 组合：
   //   - always: site-header
-  //   - compact: ".compact"（第二行 nav 收起，桌面 + 移动通用）
-  //   - compact + isMobile: ".is-mobile-hidden"（整条 header translateY 隐藏）
+  //   - compact: ".compact"（logo-row 收缩 + main-nav 收起 + HAOYAO 字号缩）
+  //   - compact + isMobile: ".is-mobile-hidden"（移动端整条 translateY 隐藏）
   const headerClass = [
     "site-header",
     compact ? "compact" : "",
@@ -97,9 +97,13 @@ export default function Header({ navItems, locale }: HeaderProps) {
     .filter(Boolean)
     .join(" ");
 
+  const homeHref = locale === "en" ? "/en" : "/";
+
   return (
     <>
-      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact（所有屏幕都收起第二行 nav；≤1023px 再叠 .is-mobile-hidden 整条收起） */}
+      {/* 主导航栏：sticky 始终显示；滚动 ≥260 触发 .compact
+          - 桌面（≥1024）：v2 三层（logo-row + main-nav）→ CHANEL 风格收
+          - 移动（≤1023）：site-header-grid（☰ + HAOYAO）→ 整条 translateY */}
       <header
         className={headerClass}
         style={{
@@ -114,6 +118,26 @@ export default function Header({ navItems, locale }: HeaderProps) {
           boxShadow: compact ? "0 6px 18px -10px rgba(25,25,24,0.18)" : "none",
         }}
       >
+        {/* ============ 桌面（≥1024）v2 三层：logo-row + main-nav ============ */}
+        <div className="logo-row">
+          <Link href={homeHref} className="logo" aria-label="HAOYAO Home">
+            <span className="logo-name">HAOYAO</span>
+            <small className="logo-sub">{t("brand.since", locale)}</small>
+          </Link>
+        </div>
+        <nav className="main-nav" aria-label="Main navigation">
+          {navItems.map((item) => (
+            <Link
+              key={item.id}
+              href={resolveHref(item, locale)}
+              className="main-nav-link"
+            >
+              {locale === "en" ? item.label.en || item.label.zh : item.label.zh}
+            </Link>
+          ))}
+        </nav>
+
+        {/* ============ 移动（≤1023）：☰ + HAOYAO 居中（v2 prototype mobile-drawer 替代品） ============ */}
         <div
           className="site-header-grid"
           style={{
@@ -123,44 +147,11 @@ export default function Header({ navItems, locale }: HeaderProps) {
             display: "flex",
             alignItems: "center",
             gap: 16,
-            height: 72,
+            height: 64,
             position: "relative",
           }}
         >
-          {/* col 1：桌面端——语言切换（紧贴 HAOYAO 左侧）；
-              ≤1024px——隐藏（语言切换进抽屉） */}
-          <Link
-            href={languageHref(pathname, locale)}
-            className="header-lang"
-            style={{
-              fontSize: 12,
-              letterSpacing: "0.2em",
-              color: "var(--ink-2)",
-              whiteSpace: "nowrap",
-              justifySelf: "start",
-            }}
-          >
-            {t("nav.switchTo", locale)}
-          </Link>
-
-          {/* HAOYAO logo 居中（绝对定位 left:50% translateX(-50%)——精准居中，无视 flex 行为；
-              字号/字距由 .brand-logo CSS 控制——compact 态字号缩到 18px（v2 原型规范）） */}
-          <Link
-            href={locale === "en" ? "/en" : "/"}
-            className="brand-logo"
-            style={{
-              whiteSpace: "nowrap",
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            HAOYAO
-          </Link>
-
-          {/* col 3 占位（桌面 nav 已移至第二行 .desktop-nav-row，避免重复渲染） */}
-
-          {/* 移动端/平板端（≤1024px）汉堡按钮（order:-1 排到 HAOYAO 之前——紧贴最左） */}
+          {/* ☰ 汉堡按钮（order:-1 紧贴最左） */}
           <button
             onClick={() => setDrawerOpen(true)}
             className="mobile-menu-btn"
@@ -173,39 +164,20 @@ export default function Header({ navItems, locale }: HeaderProps) {
           >
             ☰
           </button>
+          {/* HAOYAO logo 居中（绝对定位 left:50% translateX(-50%)——精准居中，无视 flex 行为） */}
+          <Link
+            href={homeHref}
+            className="brand-logo"
+            style={{
+              whiteSpace: "nowrap",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            HAOYAO
+          </Link>
         </div>
-
-        {/* 桌面端第二行：导航（CHANEL 风格；位于 HAOYAO 下方居中；≤1024px 隐藏） */}
-        <nav
-          className="desktop-nav-row"
-          style={{
-            maxWidth: "var(--container-max)",
-            margin: "0 auto",
-            padding: "0 var(--container-pad) 14px",
-            display: "flex",
-            justifyContent: "center",
-            gap: 32,
-            borderBottom: "1px solid var(--line)",
-          }}
-        >
-          {navItems.map((item) => (
-            <Link
-              key={item.id}
-              href={resolveHref(item, locale)}
-              style={{
-                fontSize: 14,
-                letterSpacing: "0.16em",
-                color: "var(--ink)",
-                whiteSpace: "nowrap",
-                borderBottom: "2px solid transparent",
-                paddingBottom: 4,
-                transition: "color var(--dur-hover) var(--ease-brand)",
-              }}
-            >
-              {locale === "en" ? item.label.en || item.label.zh : item.label.zh}
-            </Link>
-          ))}
-        </nav>
       </header>
 
       {/* 移动端抽屉（平级列表，无手风琴——PRD V1.2 决策） */}

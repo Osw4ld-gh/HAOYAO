@@ -41,6 +41,9 @@
     "companyNews": "COMPANY",
     "industryNews": "INDUSTRY"
   },
+  "brand": {
+    "since": "Since 2024"
+  },
   "footer": {
     "brand": "Brand",
     "join": "Join Us",

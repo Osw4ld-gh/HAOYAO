@@ -94,15 +94,22 @@ button {
    ≤1023px（平板+移动）全部改用汉堡菜单，桌面 nav 与第二行隐藏，仅显示 ☰ 在 col 1 */
 /* .site-header-grid grid-template-columns 由 JSX 内联提供（最高优先级，避免被多次定义覆盖） */
 
-.desktop-nav,
-.desktop-nav-row {
-  display: flex !important;
-}
+/* ============================================================================
+ * Header 响应式（v2 prototype 三层结构 + mobile-first）：
+ * - 默认（≤1023）：显示 .site-header-grid（☰ + HAOYAO 居中），隐藏 .logo-row / .main-nav
+ * - ≥1024：切换为 v2 三层（.logo-row + .main-nav），隐藏 .site-header-grid
+ *
+ * 注：v2 prototype 的 .topbar 层不做（无合适辅助链接内容——PRD 不做会员/门店/搜索）
+ * ========================================================================== */
 .mobile-menu-btn {
-  display: none !important;
+  display: flex;        /* mobile 默认显示 */
 }
-.header-lang {
-  display: inline-flex !important;
+.site-header-grid {
+  display: flex;
+}
+.logo-row,
+.main-nav {
+  display: none;        /* mobile 默认隐藏 */
 }
 
 /* ============================================================================
@@ -156,33 +163,11 @@ button {
 }
 
 /* ============================================================================
- * 滚动收起（CHANEL/v2 风格，所有断点通用——核心交互）
- * - .compact → 第二行 .desktop-nav-row 收起高度 + 透明 + 去下边线
- * - header 整体仍 sticky 可见，仅在 ≤1023px 叠 .is-mobile-hidden 才整条 translateY
- * 依据：原型 v2 参考实现 + UI 规范 §3.1
+ * 滚动收起（v2 prototype CHANEL 风格 spec）
+ * - 桌面 ≥1024：见下方 @media 块（.logo-row 收缩 + .main-nav 收 + .logo 字号缩 + .logo-sub 隐藏）
+ * - 移动 ≤1023：整条 header translateY(-100%)（见下方 @media 块 .is-mobile-hidden）
+ * 旧 .desktop-nav-row 规则已废弃（v2 spec 改用 .main-nav）——保留空注释避免后续再混
  * ========================================================================== */
-.desktop-nav-row {
-  /* 默认就带 overflow:hidden，max-height:0 配合 0 padding 才能干净收起 */
-  overflow: hidden;
-  transition:
-    max-height var(--dur-nav) var(--ease-brand),
-    opacity var(--dur-nav) var(--ease-brand),
-    padding var(--dur-nav) var(--ease-brand),
-    border-color var(--dur-nav) var(--ease-brand);
-}
-.site-header-grid {
-  transition: height var(--dur-nav) var(--ease-brand);
-}
-.site-header.compact .desktop-nav-row {
-  max-height: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  opacity: 0 !important;
-  border-bottom-color: transparent !important;
-}
-.site-header.compact .site-header-grid {
-  height: 56px !important;
-}
 
 /* ============================================================================
  * 品牌传承 entry-card（v2 原型 §5.5：The Maison 2 卡片）
@@ -279,20 +264,138 @@ button {
   text-indent: 0.4em;
 }
 
-/* ≤1023px：≤1024 全部走汉堡（包括 1024 平板） */
-@media (max-width: 1023px) {
-  .desktop-nav,
-  .desktop-nav-row,
-  .header-lang {
+/* ============================================================================
+ * 桌面（≥1024）v2 prototype Header 三层结构：
+ * - .logo-row    HAOYAO 28px + 副标题"皓遥 · SINCE 2024" 11px
+ * - .main-nav    6 菜单居中，gap 8px，padding 0 0 14px，max-height 60px
+ *
+ * compact 态（scrollY > 260）：
+ * - .logo-row padding 22-18 → 10-0
+ * - .logo 字号 28 → 20
+ * - .logo-sub (副标题) max-height 0 隐藏
+ * - .main-nav max-height 0 收起
+ * - header 仍 sticky 显示（CHANEL 风格）
+ * ========================================================================== */
+@media (min-width: 1024px) {
+  .logo-row {
+    display: block;
+    padding: 22px 0 18px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    transition: padding 0.18s var(--ease-brand);
+  }
+  .logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 14px;
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;          /* 衬线字体右偏补偿——视觉居中 */
+    line-height: 1;
+    color: var(--ink);
+    transition:
+      font-size 0.18s var(--ease-brand),
+      letter-spacing 0.18s var(--ease-brand);
+  }
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    color: var(--ink-3);
+    max-height: 24px;
+    overflow: hidden;
+    opacity: 1;
+    transition:
+      max-height 0.18s var(--ease-brand),
+      opacity 0.18s var(--ease-brand),
+      margin 0.18s var(--ease-brand);
+  }
+  .main-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 0 0 14px;
+    overflow: hidden;
+    max-height: 60px;
+    border-bottom: 1px solid var(--line);
+    transition:
+      max-height 0.18s var(--ease-brand),
+      padding 0.18s var(--ease-brand),
+      opacity 0.18s var(--ease-brand),
+      border-color 0.18s var(--ease-brand);
+  }
+  .main-nav-link {
+    position: relative;
+    display: block;
+    padding: 10px 22px;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    color: var(--ink);
+    white-space: nowrap;
+    transition: color 0.3s var(--ease-brand);
+  }
+  .main-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 4px;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ease-brand);
+  }
+  .main-nav-link:hover::after,
+  .main-nav-link.is-active::after {
+    transform: scaleX(1);
+  }
+  .main-nav-link.is-active {
+    color: var(--gold-deep);
+  }
+
+  /* compact 态：v2 spec */
+  .site-header.compact .logo-row {
+    padding: 10px 0;
+  }
+  .site-header.compact .logo {
+    font-size: 20px;
+  }
+  .site-header.compact .logo-sub {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+  }
+  .site-header.compact .main-nav {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    border-bottom-color: transparent;
+  }
+
+  /* 隐藏 mobile markup */
+  .site-header-grid,
+  .mobile-menu-btn {
     display: none !important;
   }
-  .mobile-menu-btn {
-    display: flex !important;
+}
+
+/* ============================================================================
+ * 移动（≤1023）：site-header-grid 主体（☰ + HAOYAO 居中）
+ * - HAOYAO 字号 20px（比桌面紧凑，64px 高度更协调）
+ * ========================================================================== */
+@media (max-width: 1023px) {
+  .brand-logo {
+    font-size: 20px;
+    letter-spacing: 0.32em;
+    text-indent: 0.32em;
   }
-  /* ≤1023px Header 容器：padding 归零（grid 默认 auto 1fr auto 已由 globals base 类定义） */
-  .site-header-grid {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  .site-header.compact.is-mobile-hidden {
+    transform: translateY(-100%);  /* 移动端整条 translateY 隐藏 */
   }
 }
 
