@@ -95,6 +95,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
             alignItems: "center",
             gap: 16,
             height: 72,
+            position: "relative",
           }}
         >
           {/* col 1：桌面端——语言切换（紧贴 HAOYAO 左侧）；
@@ -113,7 +114,7 @@ export default function Header({ navItems, locale }: HeaderProps) {
             {t("nav.switchTo", locale)}
           </Link>
 
-          {/* HAOYAO logo 居中（flex: 1 占满中间所有空间 + textAlign: center 让文本在容器中间居中） */}
+          {/* HAOYAO logo 居中（绝对定位 left:50% translateX(-50%)——精准居中，无视 flex 行为） */}
           <Link
             href={locale === "en" ? "/en" : "/"}
             style={{
@@ -121,8 +122,9 @@ export default function Header({ navItems, locale }: HeaderProps) {
               fontWeight: 600,
               letterSpacing: "0.28em",
               whiteSpace: "nowrap",
-              flex: 1,
-              textAlign: "center",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
             }}
           >
             HAOYAO
