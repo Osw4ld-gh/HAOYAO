@@ -38,7 +38,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
       </div>
 
       {/* 两栏信息 */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, maxWidth: 800, margin: "0 auto" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "var(--grid-2col)", gap: 48, maxWidth: 800, margin: "0 auto" }}>
         <div>
           <InfoBlock label={t("about.phone", locale)} value={phone || "—"} />
           <InfoBlock label={t("about.email", locale)} value={email || "—"} />

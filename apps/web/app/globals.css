@@ -56,6 +56,21 @@ button {
   background: none;
 }
 
+/* 跳过链接（无障碍）：默认隐藏，聚焦时显示 */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  background: var(--hero-1);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 13px;
+}
+.skip-link:focus {
+  left: 0;
+}
+
 /* ---------- 后台基础 ---------- */
 /* 后台整体 14px 字号（UI 规范 §2.2 后台字号阶梯） */
 .admin-root {
@@ -70,4 +85,59 @@ button {
 }
 .product-card:hover img {
   transform: scale(1.05);
+}
+
+/* ============================================================================
+ * 响应式断点（M7 专项：375 / 768 / 1024 / 1440 四档无横向溢出）
+ * 说明：页面内联 grid 引用 var(--grid-*) 变量，由本文件按断点切换列数；
+ *       组件内联样式无法被 CSS 覆盖，故统一走"变量 + 媒体查询"模式。
+ * ========================================================================== */
+
+:root {
+  /* 产品网格：默认桌面 4 列 */
+  --grid-products: repeat(4, 1fr);
+  /* 明星/资讯网格：默认 3 列 */
+  --grid-featured: repeat(3, 1fr);
+  /* 两栏布局（详情 gallery+info / contact 两栏）：桌面并排 */
+  --grid-2col: 1fr 1fr;
+  /* 网格间距（随断点收紧） */
+  --grid-gap: 24px;
+}
+
+/* 平板（≤1024px）：产品 3 列 */
+@media (max-width: 1024px) {
+  :root {
+    --grid-products: repeat(3, 1fr);
+  }
+}
+
+/* 移动（≤768px）：产品/明星 2 列，两栏单列，容器 padding 收紧 20px */
+@media (max-width: 768px) {
+  :root {
+    --container-pad: 20px;
+    --grid-products: repeat(2, 1fr);
+    --grid-featured: repeat(2, 1fr);
+    --grid-2col: 1fr;
+    --grid-gap: 16px;
+  }
+}
+
+/* 资讯列表项：移动端图文竖排 */
+@media (max-width: 768px) {
+  .news-item {
+    flex-direction: column;
+    gap: 12px !important;
+  }
+  .news-item img,
+  .news-item > span:first-child {
+    width: 100% !important;
+    height: 180px !important;
+  }
+}
+
+/* 小屏（≤375px）：产品 2 列保持紧凑（卡片内容由字号收缩兜底） */
+@media (max-width: 375px) {
+  :root {
+    --grid-products: repeat(2, 1fr);
+  }
 }

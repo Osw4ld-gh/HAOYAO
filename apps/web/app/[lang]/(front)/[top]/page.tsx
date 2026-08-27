@@ -124,7 +124,7 @@ export default async function TopCategoryPage({ params, searchParams }: TopPageP
         </div>
       ) : (
         <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "var(--grid-products)", gap: "var(--grid-gap)" }}>
             {items.map((product) => (
               <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}

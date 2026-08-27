@@ -41,8 +41,12 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
 
   return (
     <div className="front-shell">
+      {/* 跳过导航链接（无障碍：键盘用户直达主内容） */}
+      <a href="#main-content" className="skip-link">
+        {locale === "en" ? "Skip to content" : "跳到主内容"}
+      </a>
       <Header navItems={navItems} locale={locale} />
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
       <Footer locale={locale} contact={siteConfig.contact} />
     </div>
   );

@@ -118,7 +118,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       />
 
       {/* 主体：左图右文 */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, marginTop: 32 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "var(--grid-2col)", gap: 56, marginTop: 32 }}>
         {/* 左：画廊 */}
         <ProductGallery images={detail.images} alt={name} />
 
@@ -178,7 +178,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       {/* 成分 + 使用方式（两栏） */}
       {(detail.ingredients.zh || detail.ingredients.en || detail.usage.zh || detail.usage.en) && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, marginTop: 80 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "var(--grid-2col)", gap: 48, marginTop: 80 }}>
           {detail.ingredients.zh || detail.ingredients.en ? (
             <div>
               <SectionLabel text={t("detail.ingredients", locale)} />
@@ -202,7 +202,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {detail.related.length > 0 && (
         <section style={{ marginTop: 96 }}>
           <SectionLabel text={t("detail.related", locale)} size="large" />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)", marginTop: 28 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "var(--grid-products)", gap: "var(--grid-gap)", marginTop: 28 }}>
             {detail.related.map((product) => (
               <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}

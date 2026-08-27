@@ -90,7 +90,7 @@ export default async function HomePage({ params }: HomePageProps) {
             eyebrow="NEW ARRIVALS"
             title={t("home.newProducts", locale)}
           />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--grid-gap)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "var(--grid-products)", gap: "var(--grid-gap)" }}>
             {newProducts.map((product) => (
               <ProductCard key={product.id} product={product} locale={locale} showPrice={siteConfig.switches.show_price} showNewTag={siteConfig.switches.show_new_tag} />
             ))}
@@ -105,7 +105,7 @@ export default async function HomePage({ params }: HomePageProps) {
             eyebrow="FEATURED"
             title={t("home.featured", locale)}
           />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "var(--grid-gap)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "var(--grid-featured)", gap: "var(--grid-gap)" }}>
             {featured.map((product) => (
               <ProductCard key={product.id} product={product} locale={locale} />
             ))}

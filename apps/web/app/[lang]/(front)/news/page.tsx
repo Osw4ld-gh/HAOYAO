@@ -93,7 +93,7 @@ export default async function NewsPage({ params, searchParams }: NewsPageProps) 
               <Link
                 key={article.id}
                 href={`${prefix}/news/${article.id}`}
-                style={{ display: "flex", gap: 24, padding: "24px 0", borderBottom: "1px solid var(--line)" }}
+                className="news-item" style={{ display: "flex", gap: 24, padding: "24px 0", borderBottom: "1px solid var(--line)" }}
               >
                 {/* 封面 */}
                 {article.cover_url ? (
