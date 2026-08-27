@@ -1,0 +1,86 @@
+# ============================================================================
+# HAOYAO（皓遥）官网 生产部署编排（docker-compose.yml）
+# 服务：api（FastAPI）+ web（Next.js）+ 共享卷（SQLite / uploads）
+# 用法：
+#   1. 复制 .env.example 为 .env，填写生产密钥（JWT_SECRET / ADMIN_PASSWORD_INIT /
+#      ADMIN_API_KEY / COS_* / MEDIA_BASE_URL / NEXT_PUBLIC_*）
+#   2. docker compose up -d --build
+#   3. 反向代理（Nginx/Caddy）将 80/443 → web:3000、/api → api:8000
+# 依据：技术文档 §8 部署（前后端分离 + Docker Compose）。
+# ============================================================================
+
+services:
+  # ---------- 后端 API（FastAPI） ----------
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: haoyao-api
+    restart: unless-stopped
+    environment:
+      ENVIRONMENT: production
+      # SQLite 数据落 /data（卷持久化）；生产可替换 PostgreSQL 连接串
+      DATABASE_URL: sqlite:////data/haoyao.db
+      UPLOAD_DIR: /data/uploads
+      # 以下均从宿主 .env 注入（禁止硬编码）
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TTL_MINUTES: ${JWT_ACCESS_TTL_MINUTES:-120}
+      JWT_REFRESH_TTL_DAYS: ${JWT_REFRESH_TTL_DAYS:-14}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD_INIT: ${ADMIN_PASSWORD_INIT}
+      LOGIN_MAX_FAILURES: ${LOGIN_MAX_FAILURES:-5}
+      LOGIN_LOCK_MINUTES: ${LOGIN_LOCK_MINUTES:-15}
+      # CORS：生产建议同域反向代理或显式白名单
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      # revalidate 通知目标（Docker 网络内 web 服务）
+      NEXTJS_INTERNAL_BASE: http://web:3000
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+      # 媒体存储（local 或 cos 预签名）
+      UPLOAD_BACKEND: ${UPLOAD_BACKEND:-local}
+      MEDIA_BASE_URL: ${MEDIA_BASE_URL}
+      MAX_IMAGE_SIZE: ${MAX_IMAGE_SIZE:-10485760}
+      MAX_VIDEO_SIZE: ${MAX_VIDEO_SIZE:-209715200}
+      COS_SECRET_ID: ${COS_SECRET_ID:-}
+      COS_SECRET_KEY: ${COS_SECRET_KEY:-}
+      COS_REGION: ${COS_REGION:-ap-shanghai}
+      COS_BUCKET: ${COS_BUCKET:-}
+      COS_PRESIGN_TTL: ${COS_PRESIGN_TTL:-600}
+    volumes:
+      # SQLite + 上传文件持久化
+      - haoyao-data:/data
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ---------- 前端（Next.js） ----------
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      # 构建期注入（sitemap/robots/JSON-LD 在构建时静态生成）
+      args:
+        NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+    container_name: haoyao-web
+    restart: unless-stopped
+    environment:
+      # 运行期环境（客户端 API 地址 / revalidate 密钥）
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+    depends_on:
+      - api
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/healthz').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  haoyao-data:
+    name: haoyao-data

@@ -6,7 +6,7 @@ import type { MetadataRoute } from "next";
 // 依据：方案 §4-M5（robots）+ 技术文档 §7.5 SEO。
 // ============================================================================
 
-const SITE_URL = process.env.SITE_URL ?? "https://www.haoyao.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haoyao.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

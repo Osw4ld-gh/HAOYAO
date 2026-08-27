@@ -217,3 +217,65 @@ def test_site_config_get_update(client: TestClient, admin_headers: dict) -> None
     assert data["switches"]["show_price"] is False
     assert data["featured_products"] == [5, 3]
     assert isinstance(data["contact"], dict)
+
+
+# ============================================================================
+# 对象存储预签名（M8-COS）
+# ============================================================================
+
+def test_cos_presign_signature() -> None:
+    """M8-COS-001：COS 预签名 URL 结构（q-sign-algorithm / q-ak / q-sign-time / 有效期）。"""
+    from app.core.config import settings
+    from app.services.storage import CosStorageBackend
+
+    # 临时覆盖 COS 配置（测试环境无真实凭证，仅验证签名结构）
+    old_id, old_key, old_bucket, old_region = (
+        settings.COS_SECRET_ID,
+        settings.COS_SECRET_KEY,
+        settings.COS_BUCKET,
+        settings.COS_REGION,
+    )
+    settings.COS_SECRET_ID = "AKIDtest"
+    settings.COS_SECRET_KEY = "secret-test"
+    settings.COS_BUCKET = "haoyao-1250000000"
+    settings.COS_REGION = "ap-shanghai"
+    try:
+        cos = CosStorageBackend()
+        object_key, media_type = cos.generate_key("demo.png")
+        assert media_type == "image"
+        assert object_key.startswith("media/") and object_key.endswith(".png")
+
+        url = cos.presign_upload(object_key)
+        assert url is not None
+        assert url.startswith("https://haoyao-1250000000.cos.ap-shanghai.myqcloud.com/media/")
+        assert "q-sign-algorithm=sha1" in url
+        assert "q-ak=AKIDtest" in url
+        assert "q-sign-time=" in url
+        assert "q-signature=" in url
+    finally:
+        settings.COS_SECRET_ID, settings.COS_SECRET_KEY = old_id, old_key
+        settings.COS_BUCKET, settings.COS_REGION = old_bucket, old_region
+
+
+def test_cos_presign_requires_credentials() -> None:
+    """M8-COS-002：未配置凭证 → 预签名抛 RuntimeError（生产防护）。"""
+    from app.core.config import settings
+    from app.services.storage import CosStorageBackend
+
+    old_id, old_key, old_bucket = (
+        settings.COS_SECRET_ID, settings.COS_SECRET_KEY, settings.COS_BUCKET
+    )
+    settings.COS_SECRET_ID = ""
+    settings.COS_SECRET_KEY = ""
+    settings.COS_BUCKET = ""
+    try:
+        cos = CosStorageBackend()
+        key, _ = cos.generate_key("demo.png")
+        import pytest
+
+        with pytest.raises(RuntimeError):
+            cos.presign_upload(key)
+    finally:
+        settings.COS_SECRET_ID, settings.COS_SECRET_KEY, settings.COS_BUCKET = (
+            old_id, old_key, old_bucket
+        )

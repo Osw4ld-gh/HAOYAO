@@ -64,7 +64,9 @@ class Settings(BaseSettings):
     # 内部接口调用密钥（与 Next.js 侧 ADMIN_API_KEY 一致）
     ADMIN_API_KEY: str = "revalidate-secret"
 
-    # ---------- 媒体库（M6，本地模拟存储） ----------
+    # ---------- 媒体库（M6，本地模拟存储 / M8 对象存储） ----------
+    # 存储后端：local（本地 uploads/ 目录，开发默认）| cos（腾讯云 COS 预签名直传，生产）
+    UPLOAD_BACKEND: str = "local"
     # 上传文件保存目录（相对运行目录 apps/api；Docker 挂载卷覆盖）
     UPLOAD_DIR: str = "uploads"
     # 媒体访问基础 URL（本地开发直连后端；生产替换为 CDN 域名）
@@ -72,6 +74,17 @@ class Settings(BaseSettings):
     # 上传大小限制（字节）：图片 10MB / 视频 200MB（PRD §5.6 / 技术文档 §5.7）
     MAX_IMAGE_SIZE: int = 10 * 1024 * 1024
     MAX_VIDEO_SIZE: int = 200 * 1024 * 1024
+
+    # ---------- 对象存储（M8：UPLOAD_BACKEND=cos 时启用，腾讯云 COS） ----------
+    # 密钥（生产从环境变量/密钥管理注入，勿硬编码）
+    COS_SECRET_ID: str = ""
+    COS_SECRET_KEY: str = ""
+    # COS 地域（如 ap-shanghai）
+    COS_REGION: str = "ap-shanghai"
+    # 存储桶名称（含 appid，如 haoyao-1250000000）
+    COS_BUCKET: str = ""
+    # 预签名 URL 有效期（秒）
+    COS_PRESIGN_TTL: int = 600
 
     @property
     def cors_origins_list(self) -> list[str]:

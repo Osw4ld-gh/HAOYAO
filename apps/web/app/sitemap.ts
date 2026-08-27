@@ -12,7 +12,7 @@ import type { PageData, ProductCard } from "@/lib/api/types";
 // ============================================================================
 
 // 站点域名（上线前替换为正式域名；环境变量 SITE_URL 优先）
-const SITE_URL = process.env.SITE_URL ?? "https://www.haoyao.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haoyao.com";
 
 /** 静态页面路径（中文站无前缀；英文站自动加 /en） */
 const STATIC_PATHS: { path: string; priority: number }[] = [

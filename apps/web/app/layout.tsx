@@ -33,7 +33,7 @@ const ORGANIZATION_JSON_LD = {
   alternateName: "HAOYAO",
   slogan: "皓启纯净，遥见本真",
   description: "高端美妆护肤品牌",
-  url: process.env.SITE_URL ?? "https://www.haoyao.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.haoyao.com",
 };
 
 export default function RootLayout({

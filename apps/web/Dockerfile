@@ -21,6 +21,11 @@ WORKDIR /srv/app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /srv/app/node_modules ./node_modules
 COPY apps/web ./
+# 构建期注入：客户端可访问的公开配置（Next 构建时内联到产物）
+ARG NEXT_PUBLIC_API_BASE
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 # 构建：Next 15 输出到 apps/web/.next
 RUN npm run build
 
